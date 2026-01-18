@@ -211,3 +211,31 @@ void mmu_write(GameBoy *gb, u16 addr, u8 value) {
         gb->ie_register = value;
     }
 }
+
+// I/O Register handlers (NOTE: stubbed for now)
+u8 io_read(GameBoy *gb, u16 addr) {
+    // TODO: Implement I/O registers for each component
+    // For now, return 0xFF (open bus)
+    (void)gb;
+    (void)addr;
+
+    // Some registers have default values
+    switch (addr) {
+        case 0xFF00: // Joypad
+            return 0xCF;
+        case 0xFF40: // LCD Control
+            return 0x91;
+        case 0xFF47: // BG Palette
+            return 0xFC;
+        default:
+            return 0xFF;
+    }
+}
+
+void io_write(GameBoy *gb, u16 addr, u8 value) {
+    // TODO: Implement I/O registers for each component
+    // For now, just ignore writes
+    (void)gb;
+    (void)addr;
+    (void)value;
+}
