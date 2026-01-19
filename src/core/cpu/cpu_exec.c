@@ -50,6 +50,252 @@ u8 instr_ld_a_n(CPU *cpu) {
     return 0;
 }
 
+// Register <-> Register
+u8 instr_ld_b_b(CPU *cpu) {
+    cpu->regs.b = cpu->regs.b;
+    return 0;
+}
+
+u8 instr_ld_b_c(CPU *cpu) {
+    cpu->regs.b = cpu->regs.c;
+    return 0;
+}
+
+u8 instr_ld_b_d(CPU *cpu) {
+    cpu->regs.b = cpu->regs.d;
+    return 0;
+}
+
+u8 instr_ld_b_e(CPU *cpu) {
+    cpu->regs.b = cpu->regs.e;
+    return 0;
+}
+
+u8 instr_ld_b_h(CPU *cpu) {
+    cpu->regs.b = cpu->regs.h;
+    return 0;
+}
+
+u8 instr_ld_b_l(CPU *cpu) {
+    cpu->regs.b = cpu->regs.l;
+    return 0;
+}
+
+u8 instr_ld_b_a(CPU *cpu) {
+    cpu->regs.b = cpu->regs.a;
+    return 0;
+}
+
+u8 instr_ld_c_b(CPU *cpu) {
+    cpu->regs.c = cpu->regs.b;
+    return 0;
+}
+
+u8 instr_ld_c_c(CPU *cpu) {
+    cpu->regs.c = cpu->regs.c;
+    return 0;
+}
+
+u8 instr_ld_c_d(CPU *cpu) {
+    cpu->regs.c = cpu->regs.d;
+    return 0;
+}
+
+u8 instr_ld_c_e(CPU *cpu) {
+    cpu->regs.c = cpu->regs.e;
+    return 0;
+}
+
+u8 instr_ld_c_h(CPU *cpu) {
+    cpu->regs.c = cpu->regs.h;
+    return 0;
+}
+
+u8 instr_ld_c_l(CPU *cpu) {
+    cpu->regs.c = cpu->regs.l;
+    return 0;
+}
+
+u8 instr_ld_c_a(CPU *cpu) {
+    cpu->regs.c = cpu->regs.a;
+    return 0;
+}
+
+u8 instr_ld_d_b(CPU *cpu) {
+    cpu->regs.d = cpu->regs.b;
+    return 0;
+}
+
+u8 instr_ld_d_c(CPU *cpu) {
+    cpu->regs.d = cpu->regs.c;
+    return 0;
+}
+
+u8 instr_ld_d_d(CPU *cpu) {
+    cpu->regs.d = cpu->regs.d;
+    return 0;
+}
+
+u8 instr_ld_d_e(CPU *cpu) {
+    cpu->regs.d = cpu->regs.e;
+    return 0;
+}
+
+u8 instr_ld_d_h(CPU *cpu) {
+    cpu->regs.d = cpu->regs.h;
+    return 0;
+}
+
+u8 instr_ld_d_l(CPU *cpu) {
+    cpu->regs.d = cpu->regs.l;
+    return 0;
+}
+
+u8 instr_ld_d_a(CPU *cpu) {
+    cpu->regs.d = cpu->regs.a;
+    return 0;
+}
+
+u8 instr_ld_e_b(CPU *cpu) {
+    cpu->regs.e = cpu->regs.b;
+    return 0;
+}
+
+u8 instr_ld_e_c(CPU *cpu) {
+    cpu->regs.e = cpu->regs.c;
+    return 0;
+}
+
+u8 instr_ld_e_d(CPU *cpu) {
+    cpu->regs.e = cpu->regs.d;
+    return 0;
+}
+
+u8 instr_ld_e_e(CPU *cpu) {
+    cpu->regs.e = cpu->regs.e;
+    return 0;
+}
+
+u8 instr_ld_e_h(CPU *cpu) {
+    cpu->regs.e = cpu->regs.h;
+    return 0;
+}
+
+u8 instr_ld_e_l(CPU *cpu) {
+    cpu->regs.e = cpu->regs.l;
+    return 0;
+}
+
+u8 instr_ld_e_a(CPU *cpu) {
+    cpu->regs.e = cpu->regs.a;
+    return 0;
+}
+
+u8 instr_ld_h_b(CPU *cpu) {
+    cpu->regs.h = cpu->regs.b;
+    return 0;
+}
+
+u8 instr_ld_h_c(CPU *cpu) {
+    cpu->regs.h = cpu->regs.c;
+    return 0;
+}
+
+u8 instr_ld_h_d(CPU *cpu) {
+    cpu->regs.h = cpu->regs.d;
+    return 0;
+}
+
+u8 instr_ld_h_e(CPU *cpu) {
+    cpu->regs.h = cpu->regs.e;
+    return 0;
+}
+
+u8 instr_ld_h_h(CPU *cpu) {
+    cpu->regs.h = cpu->regs.h;
+    return 0;
+}
+
+u8 instr_ld_h_l(CPU *cpu) {
+    cpu->regs.h = cpu->regs.l;
+    return 0;
+}
+
+u8 instr_ld_h_a(CPU *cpu) {
+    cpu->regs.h = cpu->regs.a;
+    return 0;
+}
+
+u8 instr_ld_l_b(CPU *cpu) {
+    cpu->regs.l = cpu->regs.b;
+    return 0;
+}
+
+u8 instr_ld_l_c(CPU *cpu) {
+    cpu->regs.l = cpu->regs.c;
+    return 0;
+}
+
+u8 instr_ld_l_d(CPU *cpu) {
+    cpu->regs.l = cpu->regs.d;
+    return 0;
+}
+
+u8 instr_ld_l_e(CPU *cpu) {
+    cpu->regs.l = cpu->regs.e;
+    return 0;
+}
+
+u8 instr_ld_l_h(CPU *cpu) {
+    cpu->regs.l = cpu->regs.h;
+    return 0;
+}
+
+u8 instr_ld_l_l(CPU *cpu) {
+    cpu->regs.l = cpu->regs.l;
+    return 0;
+}
+
+u8 instr_ld_l_a(CPU *cpu) {
+    cpu->regs.l = cpu->regs.a;
+    return 0;
+}
+
+u8 instr_ld_a_b(CPU *cpu) {
+    cpu->regs.a = cpu->regs.b;
+    return 0;
+}
+
+u8 instr_ld_a_c(CPU *cpu) {
+    cpu->regs.a = cpu->regs.c;
+    return 0;
+}
+
+u8 instr_ld_a_d(CPU *cpu) {
+    cpu->regs.a = cpu->regs.d;
+    return 0;
+}
+
+u8 instr_ld_a_e(CPU *cpu) {
+    cpu->regs.a = cpu->regs.e;
+    return 0;
+}
+
+u8 instr_ld_a_h(CPU *cpu) {
+    cpu->regs.a = cpu->regs.h;
+    return 0;
+}
+
+u8 instr_ld_a_l(CPU *cpu) {
+    cpu->regs.a = cpu->regs.l;
+    return 0;
+}
+
+u8 instr_ld_a_a(CPU *cpu) {
+    cpu->regs.a = cpu->regs.a;
+    return 0;
+}
+
 // ============================================================================
 // 16-bit Load Instructions
 // ============================================================================
