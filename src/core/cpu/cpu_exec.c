@@ -296,6 +296,104 @@ u8 instr_ld_a_a(CPU *cpu) {
     return 0;
 }
 
+// =================================
+// Memory via HL
+// =================================
+
+// register <- [hl]
+u8 instr_ld_b_mem_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    cpu->regs.b = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+u8 instr_ld_c_mem_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    cpu->regs.c = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+u8 instr_ld_d_mem_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    cpu->regs.d = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+u8 instr_ld_e_mem_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    cpu->regs.e = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+u8 instr_ld_h_mem_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    cpu->regs.h = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+u8 instr_ld_l_mem_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    cpu->regs.l = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+u8 instr_ld_a_mem_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    cpu->regs.a = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+// [hl] <- register
+u8 instr_ld_mem_hl_b(CPU *cpu) {
+    u16 addr = cpu_read_hl(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.b);
+    return 0;
+}
+
+u8 instr_ld_mem_hl_c(CPU *cpu) {
+    u16 addr = cpu_read_hl(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.c);
+    return 0;
+}
+
+u8 instr_ld_mem_hl_d(CPU *cpu) {
+    u16 addr = cpu_read_hl(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.d);
+    return 0;
+}
+
+u8 instr_ld_mem_hl_e(CPU *cpu) {
+    u16 addr = cpu_read_hl(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.e);
+    return 0;
+}
+
+u8 instr_ld_mem_hl_h(CPU *cpu) {
+    u16 addr = cpu_read_hl(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.h);
+    return 0;
+}
+
+u8 instr_ld_mem_hl_l(CPU *cpu) {
+    u16 addr = cpu_read_hl(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.l);
+    return 0;
+}
+
+u8 instr_ld_mem_hl_a(CPU *cpu) {
+    u16 addr = cpu_read_hl(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.a);
+    return 0;
+}
+
+// [hl] <- immediate (n)
+u8 instr_ld_mem_hl_n(CPU *cpu) {
+    u16 addr  = cpu_read_hl(cpu);
+    u8  value = mmu_read(cpu->gb, cpu->pc++); // Read immediate value
+    mmu_write(cpu->gb, addr, value);
+    return 0;
+}
+
 // ============================================================================
 // 16-bit Load Instructions
 // ============================================================================
