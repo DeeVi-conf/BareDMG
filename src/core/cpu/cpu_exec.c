@@ -394,6 +394,116 @@ u8 instr_ld_mem_hl_n(CPU *cpu) {
     return 0;
 }
 
+// =================================
+// Special Memory Loads
+// =================================
+u8 instr_ld_mem_bc_a(CPU *cpu) {
+    u16 addr = cpu_read_bc(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.a);
+    return 0;
+}
+
+u8 instr_ld_mem_de_a(CPU *cpu) {
+    u16 addr = cpu_read_de(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.a);
+    return 0;
+}
+
+u8 instr_ld_a_mem_bc(CPU *cpu) {
+    u16 addr    = cpu_read_bc(cpu);
+    cpu->regs.a = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+u8 instr_ld_a_mem_de(CPU *cpu) {
+    u16 addr    = cpu_read_de(cpu);
+    cpu->regs.a = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+// https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#LD__HLI_,A
+// [hl] <- a and then increment hl
+u8 instr_ld_mem_hli_a(CPU *cpu) {
+    u16 addr = cpu_read_hl(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.a);
+    cpu_write_hl(cpu, addr + 1); // Increment hl
+    return 0;
+}
+
+// [hl] <- a and then decrement hl
+u8 instr_ld_mem_hld_a(CPU *cpu) {
+    u16 addr = cpu_read_hl(cpu);
+    mmu_write(cpu->gb, addr, cpu->regs.a);
+    cpu_write_hl(cpu, addr - 1); // Decrement hl
+    return 0;
+}
+
+// a <- [hl] and then decrement hl
+u8 instr_ld_a_mem_hld(CPU *cpu) {
+    u8 value    = cpu_read_hl(cpu);
+    cpu->regs.a = value;
+    cpu_write_hl(cpu, value - 1); // Decrement hl
+    return 0;
+}
+
+// a <- [hl] and then increment hl
+u8 instr_ld_a_mem_hli(CPU *cpu) {
+    u8 value    = cpu_read_hl(cpu);
+    cpu->regs.a = value;
+    cpu_write_hl(cpu, value + 1); // Increment hl
+    return 0;
+}
+
+// [0xFF00 + a8] <- a
+u8 instr_ldh_mem_a8_a(CPU *cpu) {
+    u8  offset = mmu_read(cpu->gb, cpu->pc++);
+    u16 addr   = 0xFF00 + offset;
+    mmu_write(cpu->gb, addr, cpu->regs.a);
+    return 0;
+}
+
+// [0xFF00 + c] <- a
+u8 instr_ldh_mem_c_a(CPU *cpu) {
+    u8  offset = cpu->regs.c;
+    u16 addr   = 0xFF00 + offset;
+    mmu_write(cpu->gb, addr, cpu->regs.a);
+    return 0;
+}
+
+// a <- [0xFF00 + a8]
+u8 instr_ldh_a_mem_a8(CPU *cpu) {
+    u8  offset  = mmu_read(cpu->gb, cpu->pc++);
+    u16 addr    = 0xFF00 + offset;
+    cpu->regs.a = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+// a <- [0xFF00 + c]
+u8 instr_ldh_a_mem_c(CPU *cpu) {
+    u8  offset  = cpu->regs.c;
+    u16 addr    = 0xFF00 + offset;
+    cpu->regs.a = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
+// [a16] <- a
+u8 instr_ld_mem_a16_a(CPU *cpu) {
+    u8  lo   = mmu_read(cpu->gb, cpu->pc++);
+    u8  hi   = mmu_read(cpu->gb, cpu->pc++);
+    u16 addr = MAKE_U16(hi, lo);
+    mmu_write(cpu->gb, addr, cpu->regs.a);
+    return 0;
+}
+
+// a <- [a16]
+u8 instr_ld_a_mem_a16(CPU *cpu) {
+    u8  lo      = mmu_read(cpu->gb, cpu->pc++);
+    u8  hi      = mmu_read(cpu->gb, cpu->pc++);
+    u16 addr    = MAKE_U16(hi, lo);
+    cpu->regs.a = mmu_read(cpu->gb, addr);
+    return 0;
+}
+
 // ============================================================================
 // 16-bit Load Instructions
 // ============================================================================
