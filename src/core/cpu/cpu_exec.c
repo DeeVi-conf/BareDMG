@@ -537,7 +537,7 @@ u8 instr_ld_sp_nn(CPU *cpu) {
 }
 
 // ============================================================================
-// 8-bit Arithmetic & Logic
+// 8-bit Arithmetic
 // https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#8-bit_arithmetic_instructions
 // ============================================================================
 
@@ -1451,6 +1451,473 @@ u8 instr_sbc_a_n(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
+    return 0;
+}
+
+// ============================================================================
+// Bitwise Logic Instructions
+// https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#Bitwise_logic_instructions
+// ============================================================================
+
+// AND A, r8
+// [A] <- A AND r8
+// Fags:
+// Z - Set if reselt is zero
+// N - 0
+// H - 1
+// C - 0
+// ----------------------------------------------
+u8 instr_and_a_b(CPU *cpu) {
+    u8 result   = cpu->regs.a & cpu->regs.b;
+
+    cpu->regs.f = FLAG_HF_CARRY;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_and_a_c(CPU *cpu) {
+    u8 result   = cpu->regs.a & cpu->regs.c;
+
+    cpu->regs.f = FLAG_HF_CARRY;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_and_a_d(CPU *cpu) {
+    u8 result   = cpu->regs.a & cpu->regs.d;
+
+    cpu->regs.f = FLAG_HF_CARRY;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_and_a_e(CPU *cpu) {
+    u8 result   = cpu->regs.a & cpu->regs.e;
+
+    cpu->regs.f = FLAG_HF_CARRY;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_and_a_h(CPU *cpu) {
+    u8 result   = cpu->regs.a & cpu->regs.h;
+
+    cpu->regs.f = FLAG_HF_CARRY;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_and_a_l(CPU *cpu) {
+    u8 result   = cpu->regs.a & cpu->regs.l;
+
+    cpu->regs.f = FLAG_HF_CARRY;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_and_a_a(CPU *cpu) {
+    cpu->regs.f = FLAG_HF_CARRY;
+    if (cpu->regs.a == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    return 0;
+}
+
+u8 instr_and_a_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    u8  value   = mmu_read(cpu->gb, addr);
+    u8  result  = cpu->regs.a & value;
+
+    cpu->regs.f = FLAG_HF_CARRY;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_and_a_n(CPU *cpu) {
+    u8 n        = mmu_read(cpu->gb, cpu->pc++);
+    u8 result   = cpu->regs.a & n;
+
+    cpu->regs.f = FLAG_HF_CARRY;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+// OR A, r8
+// [A] <- A OR r8
+// Fags:
+// Z - Set if reselt is zero
+// N - 0
+// H - 0
+// C - 0
+// ----------------------------------------------
+u8 instr_or_a_b(CPU *cpu) {
+    u8 result   = cpu->regs.a | cpu->regs.b;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_or_a_c(CPU *cpu) {
+    u8 result   = cpu->regs.a | cpu->regs.c;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_or_a_d(CPU *cpu) {
+    u8 result   = cpu->regs.a | cpu->regs.d;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_or_a_e(CPU *cpu) {
+    u8 result   = cpu->regs.a | cpu->regs.e;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_or_a_h(CPU *cpu) {
+    u8 result   = cpu->regs.a | cpu->regs.h;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_or_a_l(CPU *cpu) {
+    u8 result   = cpu->regs.a | cpu->regs.l;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_or_a_a(CPU *cpu) {
+    cpu->regs.f = 0;
+    if (cpu->regs.a == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    return 0;
+}
+
+u8 instr_or_a_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    u8  value   = mmu_read(cpu->gb, addr);
+    u8  result  = cpu->regs.a | value;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_or_a_n(CPU *cpu) {
+    u8 value    = mmu_read(cpu->gb, cpu->pc++);
+    u8 result   = cpu->regs.a | value;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+// XOR A, r8
+// [A] <- A XOR r8
+// Fags:
+// Z - Set if reselt is zero
+// N - 0
+// H - 0
+// C - 0
+// ----------------------------------------------
+u8 instr_xor_a_b(CPU *cpu) {
+    u8 result   = cpu->regs.a ^ cpu->regs.b;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_xor_a_c(CPU *cpu) {
+    u8 result   = cpu->regs.a ^ cpu->regs.c;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_xor_a_d(CPU *cpu) {
+    u8 result   = cpu->regs.a ^ cpu->regs.d;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_xor_a_e(CPU *cpu) {
+    u8 result   = cpu->regs.a ^ cpu->regs.e;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_xor_a_h(CPU *cpu) {
+    u8 result   = cpu->regs.a ^ cpu->regs.h;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_xor_a_l(CPU *cpu) {
+    u8 result   = cpu->regs.a ^ cpu->regs.l;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_xor_a_a(CPU *cpu) {
+    cpu->regs.f = FLAG_ZERO;
+    cpu->regs.a = 0;
+    return 0;
+}
+
+u8 instr_xor_a_hl(CPU *cpu) {
+    u16 addr    = cpu_read_hl(cpu);
+    u8  value   = mmu_read(cpu->gb, addr);
+    u8  result  = cpu->regs.a ^ value;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_xor_a_n(CPU *cpu) {
+    u8 value    = mmu_read(cpu->gb, cpu->pc++);
+    u8 result   = cpu->regs.a ^ value;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+// CP A, r8
+// Compare the value in A with the value in r8
+// A - r8 and set the flags accordingly && discard result
+// Flags:
+// Z - Set if reselt is zero
+// N - 1
+// H - Set if borrow from bit 4
+// C - Set if borrow (r8 > A)
+// ----------------------------------------------
+u8 instr_cp_a_b(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 b        = cpu->regs.b;
+    u8 result   = a - b;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, b))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, b))
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+u8 instr_cp_a_c(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 c        = cpu->regs.c;
+    u8 result   = a - c;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, c))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, c))
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+u8 instr_cp_a_d(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 d        = cpu->regs.d;
+    u8 result   = a - d;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, d))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, d))
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+u8 instr_cp_a_e(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 e        = cpu->regs.e;
+    u8 result   = a - e;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, e))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, e))
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+u8 instr_cp_a_h(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 h        = cpu->regs.h;
+    u8 result   = a - h;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, h))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, h))
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+u8 instr_cp_a_l(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 l        = cpu->regs.l;
+    u8 result   = a - l;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, l))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, l))
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+u8 instr_cp_a_a(CPU *cpu) {
+    cpu->regs.f = FLAG_SUBT | FLAG_ZERO;
+    return 0;
+}
+
+u8 instr_cp_a_hl(CPU *cpu) {
+    u8  a       = cpu->regs.a;
+    u16 addr    = cpu_read_hl(cpu);
+    u8  value   = mmu_read(cpu->gb, addr);
+    u8  result  = a - value;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, value))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, value))
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+u8 instr_cp_a_n(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 n        = mmu_read(cpu->gb, cpu->pc++);
+    u8 result   = a - n;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, n))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, n))
+        cpu->regs.f |= FLAG_CARRY;
+
     return 0;
 }
 
