@@ -37,7 +37,7 @@ static const InstrFunc instr_table[256] = {
     [0x15] = instr_dec_d,
     [0x16] = instr_ld_d_n,
     [0x17] = instr_rla,
-    [0x18] = instr_jr_r8,
+    [0x18] = instr_jr_e8,
     [0x19] = instr_add_hl_de,
     [0x1A] = instr_ld_a_mem_de,
     [0x1B] = instr_dec_de,
@@ -47,7 +47,7 @@ static const InstrFunc instr_table[256] = {
     [0x1F] = instr_rra,
 
     // 0x2_
-    [0x20] = instr_jr_nz_r8,
+    [0x20] = instr_jr_nz_e8,
     [0x21] = instr_ld_hl_nn,
     [0x22] = instr_ld_mem_hli_a,
     [0x23] = instr_inc_hl,
@@ -55,7 +55,7 @@ static const InstrFunc instr_table[256] = {
     [0x25] = instr_dec_h,
     [0x26] = instr_ld_h_n,
     [0x27] = instr_daa,
-    [0x28] = instr_jr_z_r8,
+    [0x28] = instr_jr_z_e8,
     [0x29] = instr_add_hl_hl,
     [0x2A] = instr_ld_a_mem_hli,
     [0x2B] = instr_dec_hl,
@@ -65,7 +65,7 @@ static const InstrFunc instr_table[256] = {
     [0x2F] = instr_cpl,
 
     // 0x3_
-    [0x30] = instr_jr_nc_r8,
+    [0x30] = instr_jr_nc_e8,
     [0x31] = instr_ld_sp_nn,
     [0x32] = instr_ld_mem_hld_a,
     [0x33] = instr_inc_sp,
@@ -73,7 +73,7 @@ static const InstrFunc instr_table[256] = {
     [0x35] = instr_dec_mem_hl,
     [0x36] = instr_ld_mem_hl_n,
     [0x37] = instr_scf,
-    [0x38] = instr_jr_c_r8,
+    [0x38] = instr_jr_c_e8,
     [0x39] = instr_add_hl_sp,
     [0x3A] = instr_ld_a_mem_hld,
     [0x3B] = instr_dec_sp,

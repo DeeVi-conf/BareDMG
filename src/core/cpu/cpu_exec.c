@@ -11,7 +11,7 @@ u8 instr_nop(CPU *cpu) {
 }
 
 // ============================================================================
-// 8-bit Load Instructions
+// NOTE: 8-bit Load Instructions
 // ============================================================================
 
 // Immediate loads
@@ -297,7 +297,7 @@ u8 instr_ld_a_a(CPU *cpu) {
 }
 
 // =================================
-// Memory via HL
+// NOTE: Memory via HL
 // =================================
 
 // register <- [hl]
@@ -395,7 +395,7 @@ u8 instr_ld_mem_hl_n(CPU *cpu) {
 }
 
 // =================================
-// Special Memory Loads
+// NOTE: Special Memory Loads
 // =================================
 u8 instr_ld_mem_bc_a(CPU *cpu) {
     u16 addr = cpu_read_bc(cpu);
@@ -505,7 +505,7 @@ u8 instr_ld_a_mem_a16(CPU *cpu) {
 }
 
 // ============================================================================
-// 16-bit Load Instructions
+// NOTE: 16-bit Load Instructions
 // ============================================================================
 
 u8 instr_ld_bc_nn(CPU *cpu) {
@@ -537,7 +537,7 @@ u8 instr_ld_sp_nn(CPU *cpu) {
 }
 
 // ============================================================================
-// 8-bit Arithmetic
+// NOTE: 8-bit Arithmetic
 // https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#8-bit_arithmetic_instructions
 // ============================================================================
 
@@ -1455,7 +1455,7 @@ u8 instr_sbc_a_n(CPU *cpu) {
 }
 
 // ============================================================================
-// Bitwise Logic Instructions
+// NOTE: Bitwise Logic Instructions
 // https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#Bitwise_logic_instructions
 // ============================================================================
 
@@ -1922,7 +1922,7 @@ u8 instr_cp_a_n(CPU *cpu) {
 }
 
 // ============================================================================
-// 16 - bit Aarithmetic Instructions
+// NOTE: 16 - bit Aarithmetic Instructions
 // https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#16-bit_arithmetic_instructions
 // ============================================================================
 
@@ -2089,7 +2089,7 @@ u8 instr_dec_sp(CPU *cpu) {
 }
 
 // ============================================================================
-// Stack Manipulation Instructions
+// NOTE: Stack Manipulation Instructions
 // https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#Stack_manipulation_instructions
 // ============================================================================
 
@@ -2097,6 +2097,7 @@ u8 instr_dec_sp(CPU *cpu) {
 // push regisrter r16 onto stack
 // Flags:
 // None affected
+// ----------------------------------------------
 u8 instr_push_bc(CPU *cpu) {
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, cpu->regs.b);
@@ -2133,6 +2134,7 @@ u8 instr_push_af(CPU *cpu) {
 // pop regisrter r16 from stack
 // Flags:
 // None affected
+// ----------------------------------------------
 u8 instr_pop_bc(CPU *cpu) {
     cpu->regs.c = mmu_read(cpu->gb, cpu->sp++);
     cpu->regs.b = mmu_read(cpu->gb, cpu->sp++);
@@ -2158,18 +2160,129 @@ u8 instr_pop_af(CPU *cpu) {
 }
 
 // ============================================================================
-// Control Flow
+// NOTE: Jumps & Sub-routine instructions
+// https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#Jumps_and_subroutine_instructions
 // ============================================================================
 
-u8 instr_jp_nn(CPU *cpu) {
+// JP a16
+// Jump to 16-bit address (a16)
+// Flags:
+// None affected
+// ----------------------------------------------
+u8 instr_jp_a16(CPU *cpu) {
     u8 lo   = mmu_read(cpu->gb, cpu->pc++);
     u8 hi   = mmu_read(cpu->gb, cpu->pc++);
     cpu->pc = MAKE_U16(hi, lo);
     return 0;
 }
 
-u8 instr_jr_n(CPU *cpu) {
+// JP HL
+// Jump to 16-bit address (a16)
+// Flags:
+// None affected
+// ----------------------------------------------
+u8 instr_jp_hl(CPU *cpu) {
+    cpu->pc = cpu_read_hl(cpu);
+    return 0;
+}
+
+// JP cc a16
+// Jump to 16-bit address if cc condition is met
+// cc:
+// nz, z, nc, c
+// Flags:
+// None affected
+// ----------------------------------------------
+u8 instr_jp_nz_a16(CPU *cpu) {
+    u8 lo = mmu_read(cpu->gb, cpu->pc++);
+    u8 hi = mmu_read(cpu->gb, cpu->pc++);
+
+    if (!cpu_get_flag(cpu, FLAG_ZERO))
+        cpu->pc = MAKE_U16(hi, lo);
+
+    return 0;
+}
+
+u8 instr_jp_z_a16(CPU *cpu) {
+    u8 lo = mmu_read(cpu->gb, cpu->pc++);
+    u8 hi = mmu_read(cpu->gb, cpu->pc++);
+
+    if (cpu_get_flag(cpu, FLAG_ZERO))
+        cpu->pc = MAKE_U16(hi, lo);
+
+    return 0;
+}
+
+u8 instr_jp_nc_a16(CPU *cpu) {
+    u8 lo = mmu_read(cpu->gb, cpu->pc++);
+    u8 hi = mmu_read(cpu->gb, cpu->pc++);
+
+    if (!cpu_get_flag(cpu, FLAG_CARRY))
+        cpu->pc = MAKE_U16(hi, lo);
+
+    return 0;
+}
+
+u8 instr_jp_c_a16(CPU *cpu) {
+    u8 lo = mmu_read(cpu->gb, cpu->pc++);
+    u8 hi = mmu_read(cpu->gb, cpu->pc++);
+
+    if (cpu_get_flag(cpu, FLAG_CARRY))
+        cpu->pc = MAKE_U16(hi, lo);
+
+    return 0;
+}
+
+// JR e8
+// Relative jump to 16-bit address (a16)
+// Flags:
+// None affected
+// ----------------------------------------------
+u8 instr_jr_e8(CPU *cpu) {
     i8 offset = (i8)mmu_read(cpu->gb, cpu->pc++);
     cpu->pc += offset;
+    return 0;
+}
+
+// JR cc e8
+// Relative jump to 16-bit address if cc condition is met
+// cc:
+// nz, z, nc, c
+// Flags:
+// None affected
+// ----------------------------------------------
+u8 instr_jr_nz_e8(CPU *cpu) {
+    i8 offset = (i8)mmu_read(cpu->gb, cpu->pc++);
+
+    if (!cpu_get_flag(cpu, FLAG_ZERO))
+        cpu->pc += offset;
+
+    return 0;
+}
+
+u8 instr_jr_z_e8(CPU *cpu) {
+    i8 offset = (i8)mmu_read(cpu->gb, cpu->pc++);
+
+    if (cpu_get_flag(cpu, FLAG_ZERO))
+        cpu->pc += offset;
+
+    return 0;
+}
+
+u8 instr_jr_nc_e8(CPU *cpu) {
+    i8 offset = (i8)mmu_read(cpu->gb, cpu->pc++);
+
+    if (!cpu_get_flag(cpu, FLAG_CARRY))
+        cpu->pc += offset;
+
+    return 0;
+}
+
+u8 instr_jr_c_e8(CPU *cpu) {
+    i8 offset = (i8)mmu_read(cpu->gb, cpu->pc++);
+
+    if (cpu_get_flag(cpu, FLAG_CARRY))
+        cpu->pc += offset;
+
     return 0;
 }

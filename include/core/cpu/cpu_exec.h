@@ -258,18 +258,18 @@ u8 instr_dec_sp(CPU *cpu);
 
 // Jumps
 u8 instr_jp_a16(CPU *cpu);
+u8 instr_jp_hl(CPU *cpu);
 u8 instr_jp_nz_a16(CPU *cpu);
 u8 instr_jp_z_a16(CPU *cpu);
 u8 instr_jp_nc_a16(CPU *cpu);
 u8 instr_jp_c_a16(CPU *cpu);
-u8 instr_jp_hl(CPU *cpu);
 
 // Relative jumps (JR)
-u8 instr_jr_r8(CPU *cpu);
-u8 instr_jr_nz_r8(CPU *cpu);
-u8 instr_jr_z_r8(CPU *cpu);
-u8 instr_jr_nc_r8(CPU *cpu);
-u8 instr_jr_c_r8(CPU *cpu);
+u8 instr_jr_e8(CPU *cpu);
+u8 instr_jr_nz_e8(CPU *cpu);
+u8 instr_jr_z_e8(CPU *cpu);
+u8 instr_jr_nc_e8(CPU *cpu);
+u8 instr_jr_c_e8(CPU *cpu);
 
 // Calls & Returns
 u8 instr_call_a16(CPU *cpu);
