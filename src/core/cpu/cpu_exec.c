@@ -2286,3 +2286,155 @@ u8 instr_jr_c_e8(CPU *cpu) {
 
     return 0;
 }
+
+// JP a16
+// pushes the return address onto the stack, then jumps
+// Flags:
+// None affected
+// ----------------------------------------------
+u8 instr_call_a16(CPU *cpu) {
+    u8  lo   = mmu_read(cpu->gb, cpu->pc++);
+    u8  hi   = mmu_read(cpu->gb, cpu->pc++);
+    u16 addr = MAKE_U16(hi, lo);
+
+    // Push return address onto stack
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+
+    // Update the pc
+    cpu->pc = addr;
+    return 0;
+}
+
+// JP cc a16
+// Jump to 16-bit address if cc condition is met
+// cc:
+// nz, z, nc, c
+// Flags:
+// None affected
+// ----------------------------------------------
+u8 instr_call_nz_a16(CPU *cpu) {
+    u8  lo   = mmu_read(cpu->gb, cpu->pc++);
+    u8  hi   = mmu_read(cpu->gb, cpu->pc++);
+    u16 addr = MAKE_U16(hi, lo);
+
+    if (!cpu_get_flag(cpu, FLAG_ZERO)) {
+        cpu->sp--;
+        mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+        mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+
+        cpu->pc = addr;
+    }
+    return 0;
+}
+
+u8 instr_call_z_a16(CPU *cpu) {
+    u8  lo   = mmu_read(cpu->gb, cpu->pc++);
+    u8  hi   = mmu_read(cpu->gb, cpu->pc++);
+    u16 addr = MAKE_U16(hi, lo);
+
+    if (cpu_get_flag(cpu, FLAG_ZERO)) {
+        cpu->sp--;
+        mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+        mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+
+        cpu->pc = addr;
+    }
+    return 0;
+}
+
+u8 instr_call_nc_a16(CPU *cpu) {
+    u8  lo   = mmu_read(cpu->gb, cpu->pc++);
+    u8  hi   = mmu_read(cpu->gb, cpu->pc++);
+    u16 addr = MAKE_U16(hi, lo);
+
+    if (!cpu_get_flag(cpu, FLAG_CARRY)) {
+        cpu->sp--;
+        mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+        mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+
+        cpu->pc = addr;
+    }
+    return 0;
+}
+
+u8 instr_call_c_a16(CPU *cpu) {
+    u8  lo   = mmu_read(cpu->gb, cpu->pc++);
+    u8  hi   = mmu_read(cpu->gb, cpu->pc++);
+    u16 addr = MAKE_U16(hi, lo);
+
+    if (cpu_get_flag(cpu, FLAG_CARRY)) {
+        cpu->sp--;
+        mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+        mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+
+        cpu->pc = addr;
+    }
+    return 0;
+}
+
+// RET
+// Return from subroutine (POP PC after a call)
+// Flags:
+// None affected
+// ----------------------------------------------
+u8 instr_ret(CPU *cpu) {
+    u8 lo   = mmu_read(cpu->gb, cpu->pc++);
+    u8 hi   = mmu_read(cpu->gb, cpu->pc++);
+
+    cpu->pc = MAKE_U16(hi, lo);
+    return 0;
+}
+
+// RET cc
+// Retrun from subroutine if cc condition is met
+// cc:
+// nz, z, nc, c
+// Flags:
+// None affected
+// ----------------------------------------------
+u8 instr_ret_nz(CPU *cpu) {
+    if (!cpu_get_flag(cpu, FLAG_ZERO)) {
+        u8 lo   = mmu_read(cpu->gb, cpu->sp++);
+        u8 hi   = mmu_read(cpu->gb, cpu->sp++);
+        cpu->pc = MAKE_U16(hi, lo);
+    }
+    return 0;
+}
+
+u8 instr_ret_z(CPU *cpu) {
+    if (cpu_get_flag(cpu, FLAG_ZERO)) {
+        u8 lo   = mmu_read(cpu->gb, cpu->sp++);
+        u8 hi   = mmu_read(cpu->gb, cpu->sp++);
+        cpu->pc = MAKE_U16(hi, lo);
+    }
+    return 0;
+}
+
+u8 instr_ret_nc(CPU *cpu) {
+    if (!cpu_get_flag(cpu, FLAG_CARRY)) {
+        u8 lo   = mmu_read(cpu->gb, cpu->sp++);
+        u8 hi   = mmu_read(cpu->gb, cpu->sp++);
+        cpu->pc = MAKE_U16(hi, lo);
+    }
+    return 0;
+}
+
+u8 instr_ret_c(CPU *cpu) {
+    if (cpu_get_flag(cpu, FLAG_CARRY)) {
+        u8 lo   = mmu_read(cpu->gb, cpu->sp++);
+        u8 hi   = mmu_read(cpu->gb, cpu->sp++);
+        cpu->pc = MAKE_U16(hi, lo);
+    }
+    return 0;
+}
+
+// Return from subroutine & enable interrupts
+u8 instr_reti(CPU *cpu) {
+    u8 lo    = mmu_read(cpu->gb, cpu->sp++);
+    u8 hi    = mmu_read(cpu->gb, cpu->sp++);
+    cpu->pc  = MAKE_U16(hi, lo);
+    cpu->ime = true;
+    return 0;
+}
