@@ -36,6 +36,24 @@ bool check_carry_add_u16(u16 a, u16 b) {
     return ((u32)a + (u32)b) > 0xFFFF;
 }
 
+// ADC instruction helpers
+bool check_half_carry_adc(u8 a, u8 b, u8 carry) {
+    return ((a & 0x0F) + (b & 0x0F) + carry) > 0x0F;
+}
+
+bool check_carry_adc(u8 a, u8 b, u8 carry) {
+    return (u16)a + (u16)b + carry > 0xFF;
+}
+
+// SBC instruction helpers
+bool check_half_carry_sbc(u8 a, u8 b, u8 carry) {
+    return (a & 0x0F) < ((b & 0x0F) + carry);
+}
+
+bool check_carry_sbc(u8 a, u8 b, u8 carry) {
+    return (u16)a < (u16)b + carry;
+}
+
 // Extend 8-bit signed to 16-bit
 i16 sign_extend_i8(u8 val) {
     return (val & 0x80) ? (i16)(val | 0xFF00) : (i16)val;
