@@ -2159,6 +2159,79 @@ u8 instr_pop_af(CPU *cpu) {
     return 0;
 }
 
+// Restart Vectors
+u8 instr_rst_00(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+    cpu->pc = 0x00;
+    return 0;
+}
+
+u8 instr_rst_08(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+    cpu->pc = 0x08;
+    return 0;
+}
+
+u8 instr_rst_10(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+    cpu->pc = 0x10;
+    return 0;
+}
+
+u8 instr_rst_18(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+    cpu->pc = 0x18;
+    return 0;
+}
+
+u8 instr_rst_20(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+    cpu->pc = 0x20;
+    return 0;
+}
+
+u8 instr_rst_28(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+    cpu->pc = 0x28;
+    return 0;
+}
+
+u8 instr_rst_30(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+    cpu->pc = 0x30;
+    return 0;
+}
+
+u8 instr_rst_38(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
+    cpu->pc = 0x38;
+    return 0;
+}
+
 // ============================================================================
 // NOTE: Jumps & Sub-routine instructions
 // https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#Jumps_and_subroutine_instructions
