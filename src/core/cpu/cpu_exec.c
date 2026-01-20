@@ -548,8 +548,8 @@ u8 instr_ld_sp_nn(CPU *cpu) {
 // N - 0
 // H - Set if overflow from 3rd bit
 // ----------------------------------------------
-u8 instr_inc_a(CPU *cpu) {
-    u8   result    = cpu->regs.a + 1;
+u8 instr_inc_b(CPU *cpu) {
+    u8   result    = cpu->regs.b + 1;
 
     // Preserve carry flag
     bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
@@ -558,29 +558,230 @@ u8 instr_inc_a(CPU *cpu) {
 
     if (result == 0)
         cpu->regs.f |= FLAG_ZERO;     // Set Z if result = 0
-    if ((cpu->regs.a & 0x0F) == 0x0F) // Set H if lower nibble overlfows
+    if ((cpu->regs.b & 0x0F) == 0x0F) // Set H if lower nibble overlfows
         cpu->regs.f |= FLAG_HF_CARRY;
     if (old_carry)
         cpu->regs.f |= FLAG_CARRY; // Restore C (if it was set)
 
-    cpu->regs.a = result;
+    cpu->regs.b = result;
     return 0;
 }
 
-u8 instr_inc_b(CPU *cpu) {
-    u8   result    = cpu->regs.b + 1;
+u8 instr_inc_c(CPU *cpu) {
+    u8   result    = cpu->regs.c + 1;
 
     bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
 
     cpu->regs.f    = 0;
     if (result == 0)
         cpu->regs.f |= FLAG_ZERO;
-    if ((cpu->regs.b & 0x0F) == 0x0F)
+    if ((cpu->regs.c & 0x0F) == 0x0F)
         cpu->regs.f |= FLAG_HF_CARRY;
     if (old_carry)
         cpu->regs.f |= FLAG_CARRY;
 
+    cpu->regs.c = result;
+    return 0;
+}
+
+u8 instr_inc_d(CPU *cpu) {
+    u8   result    = cpu->regs.d + 1;
+
+    // Preserve carry flag
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = 0;
+
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.d & 0x0F) == 0x0F)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.d = result;
+    return 0;
+}
+
+u8 instr_inc_e(CPU *cpu) {
+    u8   result    = cpu->regs.e + 1;
+
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = 0;
+
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.e & 0x0F) == 0x0F)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.e = result;
+    return 0;
+}
+
+u8 instr_inc_h(CPU *cpu) {
+    u8   result    = cpu->regs.h + 1;
+
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = 0;
+
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.h & 0x0F) == 0x0F)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.h = result;
+    return 0;
+}
+
+u8 instr_inc_l(CPU *cpu) {
+    u8   result    = cpu->regs.l + 1;
+
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = 0;
+
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.l & 0x0F) == 0x0F)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.l = result;
+    return 0;
+}
+
+u8 instr_inc_a(CPU *cpu) {
+    u8   result    = cpu->regs.a + 1;
+
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = 0;
+
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.a & 0x0F) == 0x0F)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+// DEC r8
+// Decrement the value in register r8 by 1.
+// Flags:
+// Z - Set if reselt is zero
+// N - 1
+// H - Set if borrow from 4th bit
+// ----------------------------------------------
+u8 instr_dec_b(CPU *cpu) {
+    u8   result    = cpu->regs.b - 1;
+
+    // Preserve carry flag
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;  // Set Z if result is zero
+    if ((cpu->regs.b & 0x0F) == 0) // Set H if lower nibble underflows
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY; // Restore the carry flag
+
     cpu->regs.b = result;
+    return 0;
+}
+
+u8 instr_dec_c(CPU *cpu) {
+    u8   result    = cpu->regs.c - 1;
+
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.c & 0x0F) == 0)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.c = result;
+    return 0;
+}
+
+u8 instr_dec_d(CPU *cpu) {
+    u8   result    = cpu->regs.d - 1;
+
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.d & 0x0F) == 0)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.d = result;
+    return 0;
+}
+
+u8 instr_dec_e(CPU *cpu) {
+    u8   result    = cpu->regs.e - 1;
+
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.e & 0x0F) == 0)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.e = result;
+    return 0;
+}
+
+u8 instr_dec_h(CPU *cpu) {
+    u8   result    = cpu->regs.h - 1;
+
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.h & 0x0F) == 0)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.h = result;
+    return 0;
+}
+
+u8 instr_dec_l(CPU *cpu) {
+    u8   result    = cpu->regs.l - 1;
+
+    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f    = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if ((cpu->regs.l & 0x0F) == 0)
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (old_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.l = result;
     return 0;
 }
 
@@ -598,23 +799,6 @@ u8 instr_dec_a(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
-}
-
-u8 instr_dec_b(CPU *cpu) {
-    u8   result    = cpu->regs.b - 1;
-
-    bool old_carry = cpu_get_flag(cpu, FLAG_CARRY);
-
-    cpu->regs.f    = FLAG_SUBT;
-    if (result == 0)
-        cpu->regs.f |= FLAG_ZERO;
-    if ((cpu->regs.b & 0x0F) == 0)
-        cpu->regs.f |= FLAG_HF_CARRY;
-    if (old_carry)
-        cpu->regs.f |= FLAG_CARRY;
-
-    cpu->regs.b = result;
     return 0;
 }
 
