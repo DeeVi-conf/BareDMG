@@ -2089,6 +2089,75 @@ u8 instr_dec_sp(CPU *cpu) {
 }
 
 // ============================================================================
+// Stack Manipulation Instructions
+// https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#Stack_manipulation_instructions
+// ============================================================================
+
+// PUSH r16
+// push regisrter r16 onto stack
+// Flags:
+// None affected
+u8 instr_push_bc(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, cpu->regs.b);
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, cpu->regs.c);
+    return 0;
+}
+
+u8 instr_push_de(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, cpu->regs.d);
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, cpu->regs.e);
+    return 0;
+}
+
+u8 instr_push_hl(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, cpu->regs.h);
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, cpu->regs.l);
+    return 0;
+}
+
+u8 instr_push_af(CPU *cpu) {
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, cpu->regs.a);
+    cpu->sp--;
+    mmu_write(cpu->gb, cpu->sp, cpu->regs.f);
+    return 0;
+}
+
+// POP r16
+// pop regisrter r16 from stack
+// Flags:
+// None affected
+u8 instr_pop_bc(CPU *cpu) {
+    cpu->regs.c = mmu_read(cpu->gb, cpu->sp++);
+    cpu->regs.b = mmu_read(cpu->gb, cpu->sp++);
+    return 0;
+}
+
+u8 instr_pop_de(CPU *cpu) {
+    cpu->regs.e = mmu_read(cpu->gb, cpu->sp++);
+    cpu->regs.d = mmu_read(cpu->gb, cpu->sp++);
+    return 0;
+}
+
+u8 instr_pop_hl(CPU *cpu) {
+    cpu->regs.l = mmu_read(cpu->gb, cpu->sp++);
+    cpu->regs.h = mmu_read(cpu->gb, cpu->sp++);
+    return 0;
+}
+
+u8 instr_pop_af(CPU *cpu) {
+    cpu->regs.f = mmu_read(cpu->gb, cpu->sp++);
+    cpu->regs.a = mmu_read(cpu->gb, cpu->sp++);
+    return 0;
+}
+
+// ============================================================================
 // Control Flow
 // ============================================================================
 
