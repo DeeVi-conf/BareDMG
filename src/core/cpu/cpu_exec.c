@@ -802,6 +802,14 @@ u8 instr_dec_a(CPU *cpu) {
     return 0;
 }
 
+// ADD A, r8
+// a <- a + r8
+// Flags:
+// Z - Set if reselt is zero
+// N - 0
+// H - Set if overflow from bit 3
+// C - Set if overflow from bit 7
+// ----------------------------------------------
 u8 instr_add_a_b(CPU *cpu) {
     u8 a        = cpu->regs.a;
     u8 b        = cpu->regs.b;
@@ -836,6 +844,127 @@ u8 instr_add_a_c(CPU *cpu) {
     return 0;
 }
 
+u8 instr_add_a_d(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 d        = cpu->regs.d;
+    u8 result   = a + d;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_add(a, d))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_add(a, d))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_add_a_e(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 e        = cpu->regs.e;
+    u8 result   = a + e;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_add(a, e))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_add(a, e))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_add_a_h(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 h        = cpu->regs.h;
+    u8 result   = a + h;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_add(a, h))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_add(a, h))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_add_a_l(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 l        = cpu->regs.l;
+    u8 result   = a + l;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_add(a, l))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_add(a, l))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_add_a_a(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 result   = a + a;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_add(a, a))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_add(a, a))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_add_a_mem_hl(CPU *cpu) {
+    u8  a       = cpu->regs.a;
+    u16 address = cpu_read_hl(cpu);
+    u8  value   = mmu_read(cpu->gb, address);
+    u8  result  = a + value;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_add(a, a))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_add(a, a))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_add_a_n(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 n        = mmu_read(cpu->gb, cpu->pc++);
+    u8 result   = a + n;
+
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_add(a, n))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_add(a, n))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+// TODO: ADC A, r8
+
 u8 instr_sub_a_b(CPU *cpu) {
     u8 a        = cpu->regs.a;
     u8 b        = cpu->regs.b;
@@ -852,6 +981,134 @@ u8 instr_sub_a_b(CPU *cpu) {
     cpu->regs.a = result;
     return 0;
 }
+
+u8 instr_sub_a_c(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 c        = cpu->regs.c;
+    u8 result   = a - c;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, c))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, c))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_sub_a_d(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 d        = cpu->regs.d;
+    u8 result   = a - d;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, d))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, d))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_sub_a_e(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 e        = cpu->regs.e;
+    u8 result   = a - e;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, e))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, e))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_sub_a_h(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 h        = cpu->regs.h;
+    u8 result   = a - h;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, h))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, h))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_sub_a_l(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 l        = cpu->regs.l;
+    u8 result   = a - l;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, l))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, l))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_sub_a_a(CPU *cpu) {
+    cpu->regs.a = 0;
+    cpu->regs.f = FLAG_ZERO | FLAG_SUBT; // Z=1, N=1, H=0, C=0
+    return 0;
+}
+
+u8 instr_sub_a_mem_hl(CPU *cpu) {
+    u8  a       = cpu->regs.a;
+    u16 address = cpu_read_hl(cpu);
+    u8  value   = mmu_read(cpu->gb, address);
+    u8  result  = a - value;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, value))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, value))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+u8 instr_sub_a_n(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 n        = mmu_read(cpu->gb, cpu->pc++);
+    u8 result   = a - n;
+
+    cpu->regs.f = FLAG_SUBT;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (check_half_carry_sub(a, n))
+        cpu->regs.f |= FLAG_HF_CARRY;
+    if (check_carry_sub(a, n))
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}
+
+// TODO: SBC A, r8
 
 // ============================================================================
 // Control Flow
