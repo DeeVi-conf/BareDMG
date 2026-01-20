@@ -2511,3 +2511,153 @@ u8 instr_reti(CPU *cpu) {
     cpu->ime = true;
     return 0;
 }
+
+// ============================================================================
+// NOTE: Rotates / Flags
+// https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#Bit_shift_instructions
+// ============================================================================
+
+// RLCA
+// Rotate register A left
+// Flags:
+// Z = N = H = 0
+// C = according to the result
+// ----------------------------------------------
+u8 instr_rlca(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 carry    = CHECK_BIT(a, 7);
+
+    cpu->regs.a = (a << 1) | carry;
+
+    cpu->regs.f = 0;
+    if (carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+// RRCA
+// Rotate register A right
+// Flags:
+// Z = N = H = 0
+// C = according to the result
+// ----------------------------------------------
+u8 instr_rrca(CPU *cpu) {
+    u8 a        = cpu->regs.a;
+    u8 carry    = CHECK_BIT(a, 7);
+
+    cpu->regs.a = (a >> 1) | (carry << 7);
+
+    cpu->regs.f = 0;
+    if (carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+// RLA
+// Rotate register A left, through the carry flag
+// Flags:
+// Z = N = H = 0
+// C = according to the result
+// ----------------------------------------------
+u8 instr_rla(CPU *cpu) {
+    u8 a         = cpu->regs.a;
+    u8 old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+    u8 new_carry = CHECK_BIT(a, 7);
+
+    cpu->regs.a  = (a << 1) | old_carry;
+
+    cpu->regs.f  = 0;
+    if (new_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+// RRA
+// Rotate register A right, through the carry flag
+// Flags:
+// Z = N = H = 0
+// C = according to the result
+// ----------------------------------------------
+u8 instr_rra(CPU *cpu) {
+    u8 a         = cpu->regs.a;
+    u8 old_carry = cpu_get_flag(cpu, FLAG_CARRY);
+    u8 new_carry = CHECK_BIT(a, 7);
+
+    cpu->regs.a  = (a >> 1) | (old_carry << 7);
+
+    cpu->regs.f  = 0;
+    if (new_carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    return 0;
+}
+
+// CPL
+// Complement Accumulator register
+// Flags:
+// N = H = 1
+u8 instr_cpl(CPU *cpu) {
+    cpu->regs.a ^= 0xFF;
+    cpu->regs.f |= FLAG_SUBT | FLAG_HF_CARRY;
+    return 0;
+}
+
+// SCF
+// Set carry flag
+// N = H = 0
+// C = 1
+u8 instr_scf(CPU *cpu) {
+    cpu->regs.f &= FLAG_ZERO;  // Preserve Z
+    cpu->regs.f |= FLAG_CARRY; // Set C
+    return 0;
+}
+
+// CCF
+// Complement carry flag
+// Flags:
+// N = H = 0
+// C = inverted
+u8 instr_ccf(CPU *cpu) {
+    bool carry = cpu_get_flag(cpu, FLAG_CARRY);
+
+    cpu->regs.f &= FLAG_ZERO;
+    if (!carry)
+        cpu->regs.f |= FLAG_CARRY; // Set C
+
+    return 0;
+}
+
+// DAA
+// Decimal Adjust Accumulator
+// If inputs of ADD, ADC, SUB, SBC in BCD
+// adjust result to bel in BCD as well
+// Exact behavior of this instruction depends on N flag
+// https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#DAA
+u8 instr_daa(CPU *cpu) {
+    u8   a      = cpu->regs.a;
+
+    bool sub    = cpu_get_flag(cpu, FLAG_SUBT);
+    bool half   = cpu_get_flag(cpu, FLAG_HF_CARRY);
+    bool carry  = cpu_get_flag(cpu, FLAG_CARRY);
+
+    u8   result = adjust_bcd(a, sub, carry, half);
+
+    // Update flags
+    cpu->regs.f = 0;
+    if (result == 0)
+        cpu->regs.f |= FLAG_ZERO;
+    if (sub)
+        cpu->regs.f |= FLAG_SUBT;
+
+    // Carry is set if we corrected with 0x60
+    if (!sub && (carry || a > 0x99))
+        cpu->regs.f |= FLAG_CARRY;
+    if (sub && carry)
+        cpu->regs.f |= FLAG_CARRY;
+
+    cpu->regs.a = result;
+    return 0;
+}

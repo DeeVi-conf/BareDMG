@@ -54,6 +54,33 @@ bool check_carry_sbc(u8 a, u8 b, u8 carry) {
     return (u16)a < (u16)b + carry;
 }
 
+// DAA instruction helper
+u8 adjust_bcd(u8 value, bool subtract, bool carry, bool half_carry) {
+    u8 correction = 0;
+
+    if (!subtract) {
+        // After ADD / ADC
+        if (half_carry || (value & 0x0F) > 0x09)
+            correction |= 0x06;
+
+        if (carry || value > 0x99)
+            correction |= 0x60;
+
+        value += correction;
+    } else {
+        // After SUB / SBC
+        if (half_carry)
+            correction |= 0x06;
+
+        if (carry)
+            correction |= 0x60;
+
+        value -= correction;
+    }
+
+    return value;
+}
+
 // Extend 8-bit signed to 16-bit
 i16 sign_extend_i8(u8 val) {
     return (val & 0x80) ? (i16)(val | 0xFF00) : (i16)val;
