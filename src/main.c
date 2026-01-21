@@ -58,7 +58,12 @@ int main(int argc, char *argv[]) {
     gb_init(&gb);
 
     // Load ROM && Print the parsed header
-    printf("Loading ROM: %s\n", rom_path);
+    // Handle error if only a flag is specified (no ROM file given)
+    if ((argv[1])[0] == '-') {
+        fprintf(stderr, "Error: No ROM file specified\n\n");
+        print_usage(argv[0]);
+        return 0;
+    }
     gb_load_rom(&gb, rom_path);
 
     // Check if the load was successful

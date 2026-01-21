@@ -15,7 +15,7 @@ void gb_load_rom(GameBoy *gb, const char *path) {
     // Try to load the cartridge
     // TODO: Might print details about the error (using error codes)
     if (cart_load(&gb->cart, path) != 0) {
-        fprintf(stderr, "Failed to load ROM\n");
+        /* fprintf(stderr, "Failed to load ROM\n"); */
         gb->running = false;
         return;
     }
