@@ -7,81 +7,157 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Print the user Instructions
+#define RUN_DEBUG_INTERVAL 1000
+
+// Print the usage information
 static void print_usage(const char *program_name) {
-    printf("Usage: %s <path_to_rom>\n", program_name);
+    printf("Usage: %s [options] <path_to_rom>\n", program_name);
     printf("\n");
-    printf("Options:\n");
-    printf("  <path_to_rom>    Path to Game Boy ROM file (.gb)\n");
+    printf("Modes (mutually exclusive):\n");
+    printf("  -i               Info mode (default): load ROM, print header info, then exit\n");
+    printf("  -s <num>         Step mode: execute exactly <num> CPU instructions\n");
+    printf("  -r               Run mode: execute instructions until timeout or HALT\n");
+    printf("\n");
+    printf("Other options:\n");
+    printf("  -d               Debug mode (verbose CPU state output)\n");
+    printf("  -h               Show this help message\n");
+}
+
+// print the CPU state
+static void print_cpu_state(GameBoy *gb) {
+    printf("\nFinal state:\n");
+    printf("  PC = 0x%04X\n", gb->cpu.pc);
+    printf("  SP = 0x%04X\n", gb->cpu.sp);
+    printf("  AF = 0x%04X\n", cpu_read_af(&gb->cpu));
+    printf("  BC = 0x%04X\n", cpu_read_bc(&gb->cpu));
+    printf("  DE = 0x%04X\n", cpu_read_de(&gb->cpu));
+    printf("  HL = 0x%04X\n", cpu_read_hl(&gb->cpu));
+    printf("  Flags: Z=%d N=%d H=%d C=%d\n", cpu_get_flag(&gb->cpu, FLAG_ZERO),
+           cpu_get_flag(&gb->cpu, FLAG_SUBT), cpu_get_flag(&gb->cpu, FLAG_HF_CARRY),
+           cpu_get_flag(&gb->cpu, FLAG_CARRY));
+    printf("  Total cycles: %llu\n", (unsigned long long)gb->cycles);
 }
 
 int main(int argc, char *argv[]) {
-    // Check arguments
+
     if (argc < 2) {
         fprintf(stderr, "Error: No ROM file specified\n\n");
         print_usage(argv[0]);
-        return -2;
-    }
-
-    const char *rom_path   = argv[1];
-    bool        run_mode   = false;
-    bool        debug_mode = false;
-    int         step_count = 0;
-
-    // Parse options
-    for (int i = 2; i < argc; i++) {
-        if (strcmp(argv[i], "-r") == 0 || strcmp(argv[i], "--run") == 0)
-            run_mode = true;
-        else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--debug") == 0)
-            debug_mode = true;
-        else if (strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--step") == 0) {
-            if (i + 1 < argc)
-                step_count = atoi(argv[++i]);
-        } else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--info") == 0) {
-            // Info mode (default mode)
-        } else {
-            fprintf(stderr, "Unknown Options: %s\n", argv[i]);
-            print_usage(argv[0]);
-            return 1;
-        }
+        return 1;
     }
 
     // Print banner
     printf("=================================\n");
     printf("          BareDMG\n");
     printf("    Game Boy Emulator (DMG-01)\n");
-    printf("=================================\n");
-    printf("\n");
+    printf("=================================\n\n");
 
-    // Initialize Game Boy
-    GameBoy gb;
-    gb_init(&gb);
+    const char *rom_path       = NULL;
+    bool        mode_specified = false;
+    bool        run_mode       = false;
+    bool        debug_mode     = false;
+    bool        info_mode      = false;
+    int         step_count     = 0;
 
-    // Load ROM && Print the parsed header
-    // Handle error if only a flag is specified (no ROM file given)
-    if ((argv[1])[0] == '-') {
+    // Parse arguments
+    for (int i = 1; i < argc; i++) {
+
+        // Flag
+        if (argv[i][0] == '-') {
+
+            if (strcmp(argv[i], "-h") == 0) {
+                print_usage(argv[0]);
+                return 0;
+            }
+
+            else if (strcmp(argv[i], "-r") == 0) {
+                if (step_count > 0) {
+                    fprintf(stderr, "Error: -r and -s cannot be used together\n");
+                    return 1;
+                }
+                run_mode       = true;
+                mode_specified = true;
+            }
+
+            else if (strcmp(argv[i], "-s") == 0) {
+                if (run_mode) {
+                    fprintf(stderr, "Error: -s and -r cannot be used together\n");
+                    return 1;
+                }
+                if (i + 1 >= argc) {
+                    fprintf(stderr, "Error: -s requires a number\n");
+                    return 1;
+                }
+                step_count = atoi(argv[++i]);
+                if (step_count <= 0) {
+                    fprintf(stderr, "Error: Invalid step count\n");
+                    return 1;
+                }
+                mode_specified = true;
+            }
+
+            else if (strcmp(argv[i], "-i") == 0) {
+                info_mode      = true;
+                mode_specified = true;
+            }
+
+            else if (strcmp(argv[i], "-d") == 0) {
+                debug_mode = true;
+            }
+
+            else {
+                fprintf(stderr, "Unknown option: %s\n", argv[i]);
+                print_usage(argv[0]);
+                return 1;
+            }
+        }
+
+        // Not a flag (ROM file)
+        else {
+            if (rom_path != NULL) {
+                fprintf(stderr, "Error: Multiple ROM files specified\n");
+                return 1;
+            }
+            rom_path = argv[i];
+        }
+    }
+
+    // Check if the ROM file was provided
+    if (!rom_path) {
         fprintf(stderr, "Error: No ROM file specified\n\n");
         print_usage(argv[0]);
-        return 0;
+        return 1;
     }
+
+    // Default to info mode if no mode specified
+    if (!mode_specified) {
+        info_mode = true;
+        printf("No mode specified; defaulting to info mode (-i)\n\n");
+    }
+
+    if (info_mode && debug_mode) {
+        printf("Note: debug mode (-d) has no effect in info mode\n\n");
+    }
+
+    // Initialize Game Boy and load ROM
+    GameBoy gb;
+    gb_init(&gb);
     gb_load_rom(&gb, rom_path);
 
-    // Check if the load was successful
     if (!gb.running) {
         fprintf(stderr, "Failed to load ROM\n");
-        return -3;
+        return 1;
     }
 
-    // ROM loaded Successfully
     printf("ROM Loaded Successfully!\n");
 
-    // If just info mode, exit
-    if (!run_mode && step_count == 0) {
+    // Info mode: Exit after loading & printing cartridge info
+    if (info_mode) {
         cart_unload(&gb.cart);
         return 0;
     }
 
-    // Run or Step mode
+    // Step mode
     if (step_count > 0) {
         printf("\nExecuting %d instructions...\n\n", step_count);
 
@@ -89,64 +165,54 @@ int main(int argc, char *argv[]) {
             u16 pc_before = gb.cpu.pc;
             u8  opcode    = mmu_read(&gb, pc_before);
 
-            // Verbose output if debug mode
             if (debug_mode) {
-                printf("[%04d] PC=0x%04X  Opcode=0x%02X  A=%02X B=%02X C=%02X D=%02X E=%02X H=%02X "
-                       "L=%02X SP=%04X F=%02X\n",
+                printf("[%04d] PC=0x%04X Opcode=0x%02X "
+                       "A=%02X B=%02X C=%02X D=%02X E=%02X H=%02X L=%02X "
+                       "SP=%04X F=%02X\n",
                        i, pc_before, opcode, gb.cpu.regs.a, gb.cpu.regs.b, gb.cpu.regs.c,
                        gb.cpu.regs.d, gb.cpu.regs.e, gb.cpu.regs.h, gb.cpu.regs.l, gb.cpu.sp,
                        gb.cpu.regs.f);
             }
+
             gb_step(&gb);
 
-            // Stop if HALT is encountered
             if (gb.cpu.halted) {
                 printf("\nCPU halted at PC=0x%04X after %d instructions\n", pc_before, i + 1);
+                print_cpu_state(&gb);
                 break;
             }
 
-            // Report if infinite loop is detected
-            // 0x76 is HALT
             if (gb.cpu.pc == pc_before && opcode != 0x76) {
                 printf("\nInfinite loop detected at PC=0x%04X\n", pc_before);
+                print_cpu_state(&gb);
                 break;
             }
         }
-        // Print the final state of CPU
-        printf("\nFinal state:\n");
-        printf("  PC = 0x%04X\n", gb.cpu.pc);
-        printf("  SP = 0x%04X\n", gb.cpu.sp);
-        printf("  A  = 0x%02X  F = 0x%02X (AF = 0x%04X)\n", gb.cpu.regs.a, gb.cpu.regs.f,
-               cpu_read_af(&gb.cpu));
-        printf("  B  = 0x%02X  C = 0x%02X (BC = 0x%04X)\n", gb.cpu.regs.b, gb.cpu.regs.c,
-               cpu_read_bc(&gb.cpu));
-        printf("  D  = 0x%02X  E = 0x%02X (DE = 0x%04X)\n", gb.cpu.regs.d, gb.cpu.regs.e,
-               cpu_read_de(&gb.cpu));
-        printf("  H  = 0x%02X  L = 0x%02X (HL = 0x%04X)\n", gb.cpu.regs.h, gb.cpu.regs.l,
-               cpu_read_hl(&gb.cpu));
-        printf("  Flags: Z=%d N=%d H=%d C=%d\n", cpu_get_flag(&gb.cpu, FLAG_ZERO) ? 1 : 0,
-               cpu_get_flag(&gb.cpu, FLAG_SUBT) ? 1 : 0,
-               cpu_get_flag(&gb.cpu, FLAG_HF_CARRY) ? 1 : 0,
-               cpu_get_flag(&gb.cpu, FLAG_CARRY) ? 1 : 0);
-        printf("  Total cycles: %llu\n", (unsigned long long)gb.cycles);
+        // print the final state of the CPU
+        print_cpu_state(&gb);
+    }
 
-    } else if (run_mode) {
+    // Run mode
+    else if (run_mode) {
         printf("Running emulator (press Ctrl+C to stop)...\n");
         printf("NOTE: No PPU/APU yet, this will just execute instructions.\n\n");
 
-        // Run for a limited time (100000 instructions)
         for (int i = 0; i < 100000 && gb.running && !gb.cpu.halted; i++) {
             gb_step(&gb);
+
+            // Verbose output per interval if debug mode
+            if (debug_mode && (i % RUN_DEBUG_INTERVAL == 0)) {
+                printf("[RUN %06d] PC=0x%04X SP=0x%04X AF=%04X BC=%04X DE=%04X HL=%04X\n", i,
+                       gb.cpu.pc, gb.cpu.sp, cpu_read_af(&gb.cpu), cpu_read_bc(&gb.cpu),
+                       cpu_read_de(&gb.cpu), cpu_read_hl(&gb.cpu));
+            }
         }
 
-        printf("\nEmulation Ran Out.\n");
-        printf("Final PC: 0x%04X\n", gb.cpu.pc);
-        printf("Total cycles: %llu\n", (unsigned long long)gb.cycles);
+        printf("\nEmulation finished.\n");
+        print_cpu_state(&gb);
     }
 
-    // Clean up
     cart_unload(&gb.cart);
-
     puts("\nExiting...\n");
     return 0;
 }
