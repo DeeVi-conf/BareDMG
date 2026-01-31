@@ -214,30 +214,170 @@ void mmu_write(GameBoy *gb, u16 addr, u8 value) {
 
 // I/O Register handlers (NOTE: stubbed for now)
 u8 io_read(GameBoy *gb, u16 addr) {
-    // TODO: Implement I/O registers for each component
-    // For now, return 0xFF (open bus)
-    (void)gb;
-    (void)addr;
-
-    // Some registers have default values
     switch (addr) {
-        case 0xFF00: // Joypad
-            return 0xCF;
-        case 0xFF40: // LCD Control
-            return 0x91;
-        case 0xFF47: // BG Palette
-            return 0xFC;
+        // Joypad
+        case 0xFF00:
+            return gb->io.joyp;
+
+        // Serial
+        case 0xFF01:
+            return gb->io.sb;
+        case 0xFF02:
+            return gb->io.sc;
+
+        // Timer
+        case 0xFF04:
+            return gb->io.div;
+        case 0xFF05:
+            return gb->io.tima;
+        case 0xFF06:
+            return gb->io.tma;
+        case 0xFF07:
+            return gb->io.tac;
+
+        // Interrupt Flag
+        case 0xFF0F:
+            return gb->io.if_reg | 0xE0; // Upper bits always 1
+
+        // Sound (stubbed - return 0xFF)
+        case 0xFF10 ... 0xFF26:
+            return gb->io.sound[addr - 0xFF10];
+
+        // LCD
+        case 0xFF40:
+            return gb->io.lcdc;
+        case 0xFF41:
+            return gb->io.stat | 0x80; // Bit 7 always 1
+        case 0xFF42:
+            return gb->io.scy;
+        case 0xFF43:
+            return gb->io.scx;
+        case 0xFF44:
+            return gb->io.ly;
+        case 0xFF45:
+            return gb->io.lyc;
+        case 0xFF46:
+            return gb->io.dma;
+        case 0xFF47:
+            return gb->io.bgp;
+        case 0xFF48:
+            return gb->io.obp0;
+        case 0xFF49:
+            return gb->io.obp1;
+        case 0xFF4A:
+            return gb->io.wy;
+        case 0xFF4B:
+            return gb->io.wx;
+
+        // Boot ROM
+        case 0xFF50:
+            return gb->io.boot;
+
+        // Unmapped
         default:
             return 0xFF;
     }
 }
 
 void io_write(GameBoy *gb, u16 addr, u8 value) {
-    // TODO: Implement I/O registers for each component
-    // For now, just ignore writes
-    (void)gb;
-    (void)addr;
-    (void)value;
+    switch (addr) {
+        // Joypad
+        case 0xFF00:
+            gb->io.joyp = (gb->io.joyp & 0xCF) | (value & 0x30);
+            break;
+
+        // Serial
+        case 0xFF01:
+            gb->io.sb = value;
+            break;
+        case 0xFF02:
+            gb->io.sc = value;
+            if (value & 0x80) {
+                // Serial transfer started - output character
+                putchar(gb->io.sb);
+                fflush(stdout);
+                // Clear transfer flag and set interrupt
+                gb->io.sc &= 0x7F;
+                gb->io.if_reg |= 0x08; // Serial interrupt
+            }
+            break;
+
+        // Timer
+        case 0xFF04:
+            gb->io.div = 0; // Writing any value resets DIV to 0
+            break;
+        case 0xFF05:
+            gb->io.tima = value;
+            break;
+        case 0xFF06:
+            gb->io.tma = value;
+            break;
+        case 0xFF07:
+            gb->io.tac = value & 0x07;
+            break; // Only lower 3 bits
+
+        // Interrupt Flag
+        case 0xFF0F:
+            gb->io.if_reg = value & 0x1F; // Only lower 5 bits writable
+            break;
+
+        // Sound (stubbed)
+        case 0xFF10 ... 0xFF26:
+            gb->io.sound[addr - 0xFF10] = value;
+            break;
+
+        // LCD
+        case 0xFF40:
+            gb->io.lcdc = value;
+            break;
+        case 0xFF41:
+            // Only bits 3-6 are writable
+            gb->io.stat = (gb->io.stat & 0x87) | (value & 0x78);
+            break;
+        case 0xFF42:
+            gb->io.scy = value;
+            break;
+        case 0xFF43:
+            gb->io.scx = value;
+            break;
+        case 0xFF44:
+            break; // LY is read-only
+        case 0xFF45:
+            gb->io.lyc = value;
+            break;
+        case 0xFF46:
+            // DMA transfer - copy 0xA0 bytes from XX00-XX9F to OAM
+            gb->io.dma = value;
+            u16 src    = value << 8;
+            for (int i = 0; i < 0xA0; i++) {
+                gb->oam[i] = mmu_read(gb, src + i);
+            }
+            break;
+        case 0xFF47:
+            gb->io.bgp = value;
+            break;
+        case 0xFF48:
+            gb->io.obp0 = value;
+            break;
+        case 0xFF49:
+            gb->io.obp1 = value;
+            break;
+        case 0xFF4A:
+            gb->io.wy = value;
+            break;
+        case 0xFF4B:
+            gb->io.wx = value;
+            break;
+
+        // Boot ROM
+        case 0xFF50:
+            gb->io.boot = value;
+            break;
+
+        default:
+            // Ignore writes to unmapped registers
+            break;
+    }
 }
 
 // Debug Helper: Dump Memory Region
