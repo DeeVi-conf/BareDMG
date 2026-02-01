@@ -517,17 +517,19 @@ u8 instr_ld_mem_hld_a(CPU *cpu) {
 
 // a <- [hl] and then decrement hl
 u8 instr_ld_a_mem_hld(CPU *cpu) {
-    u8 value    = cpu_read_hl(cpu);
+    u16 addr    = cpu_read_hl(cpu);
+    u8  value   = mmu_read(cpu->gb, addr);
     cpu->regs.a = value;
-    cpu_write_hl(cpu, value - 1); // Decrement hl
+    cpu_write_hl(cpu, addr - 1); // Decrement HL
     return 0;
 }
 
 // a <- [hl] and then increment hl
 u8 instr_ld_a_mem_hli(CPU *cpu) {
-    u8 value    = cpu_read_hl(cpu);
+    u16 addr    = cpu_read_hl(cpu);
+    u8  value   = mmu_read(cpu->gb, addr);
     cpu->regs.a = value;
-    cpu_write_hl(cpu, value + 1); // Increment hl
+    cpu_write_hl(cpu, addr + 1); // Increment HL
     return 0;
 }
 
@@ -1067,9 +1069,9 @@ u8 instr_add_a_mem_hl(CPU *cpu) {
     cpu->regs.f = 0;
     if (result == 0)
         cpu->regs.f |= FLAG_ZERO;
-    if (check_half_carry_add(a, a))
+    if (check_half_carry_add(a, value))
         cpu->regs.f |= FLAG_HF_CARRY;
-    if (check_carry_add(a, a))
+    if (check_carry_add(a, value))
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
@@ -2176,13 +2178,13 @@ u8 instr_inc_bc(CPU *cpu) {
 
 u8 instr_inc_de(CPU *cpu) {
     u16 de = cpu_read_de(cpu);
-    cpu_write_bc(cpu, ++de);
+    cpu_write_de(cpu, ++de);
     return 0;
 }
 
 u8 instr_inc_hl(CPU *cpu) {
     u16 hl = cpu_read_hl(cpu);
-    cpu_write_bc(cpu, ++hl);
+    cpu_write_hl(cpu, ++hl);
     return 0;
 }
 
@@ -2203,13 +2205,13 @@ u8 instr_dec_bc(CPU *cpu) {
 
 u8 instr_dec_de(CPU *cpu) {
     u16 de = cpu_read_de(cpu);
-    cpu_write_bc(cpu, --de);
+    cpu_write_de(cpu, --de);
     return 0;
 }
 
 u8 instr_dec_hl(CPU *cpu) {
     u16 hl = cpu_read_hl(cpu);
-    cpu_write_bc(cpu, --hl);
+    cpu_write_hl(cpu, --hl);
     return 0;
 }
 
@@ -2516,6 +2518,7 @@ u8 instr_call_a16(CPU *cpu) {
     // Push return address onto stack
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_HIGH_BYTE(cpu->pc));
+    cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
 
     // Update the pc
