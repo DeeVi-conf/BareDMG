@@ -655,7 +655,7 @@ u8 instr_inc_b(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY; // Restore C (if it was set)
 
     cpu->regs.b = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_inc_c(CPU *cpu) {
@@ -672,7 +672,7 @@ u8 instr_inc_c(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.c = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_inc_d(CPU *cpu) {
@@ -691,7 +691,7 @@ u8 instr_inc_d(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.d = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_inc_e(CPU *cpu) {
@@ -709,7 +709,7 @@ u8 instr_inc_e(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.e = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_inc_h(CPU *cpu) {
@@ -727,7 +727,7 @@ u8 instr_inc_h(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.h = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_inc_l(CPU *cpu) {
@@ -745,7 +745,7 @@ u8 instr_inc_l(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.l = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_inc_a(CPU *cpu) {
@@ -763,7 +763,7 @@ u8 instr_inc_a(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_inc_mem_hl(CPU *cpu) {
@@ -783,7 +783,7 @@ u8 instr_inc_mem_hl(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     mmu_write(cpu->gb, addr, result);
-    return 0;
+    return 12;
 }
 
 // DEC r8
@@ -808,7 +808,7 @@ u8 instr_dec_b(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY; // Restore the carry flag
 
     cpu->regs.b = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_dec_c(CPU *cpu) {
@@ -825,7 +825,7 @@ u8 instr_dec_c(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.c = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_dec_d(CPU *cpu) {
@@ -842,7 +842,7 @@ u8 instr_dec_d(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.d = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_dec_e(CPU *cpu) {
@@ -859,7 +859,7 @@ u8 instr_dec_e(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.e = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_dec_h(CPU *cpu) {
@@ -876,7 +876,7 @@ u8 instr_dec_h(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.h = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_dec_l(CPU *cpu) {
@@ -893,7 +893,7 @@ u8 instr_dec_l(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.l = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_dec_a(CPU *cpu) {
@@ -910,7 +910,7 @@ u8 instr_dec_a(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_dec_mem_hl(CPU *cpu) {
@@ -929,7 +929,7 @@ u8 instr_dec_mem_hl(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     mmu_write(cpu->gb, addr, result);
-    return 0;
+    return 12;
 }
 
 // ADD A, r8
@@ -954,7 +954,7 @@ u8 instr_add_a_b(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 4; //adding a and b is 4 cycles and so is for c, d, e, h, k, l or a
+    return 4;
 }
 
 u8 instr_add_a_c(CPU *cpu) {
@@ -1712,7 +1712,7 @@ u8 instr_or_a_b(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_or_a_c(CPU *cpu) {
@@ -1723,7 +1723,7 @@ u8 instr_or_a_c(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_or_a_d(CPU *cpu) {
@@ -1734,7 +1734,7 @@ u8 instr_or_a_d(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_or_a_e(CPU *cpu) {
@@ -1745,7 +1745,7 @@ u8 instr_or_a_e(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_or_a_h(CPU *cpu) {
@@ -1756,7 +1756,7 @@ u8 instr_or_a_h(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_or_a_l(CPU *cpu) {
@@ -1767,7 +1767,7 @@ u8 instr_or_a_l(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_or_a_a(CPU *cpu) {
@@ -1775,7 +1775,7 @@ u8 instr_or_a_a(CPU *cpu) {
     if (cpu->regs.a == 0)
         cpu->regs.f |= FLAG_ZERO;
 
-    return 0;
+    return 4;
 }
 
 u8 instr_or_a_mem_hl(CPU *cpu) {
@@ -1788,7 +1788,7 @@ u8 instr_or_a_mem_hl(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 u8 instr_or_a_n(CPU *cpu) {
@@ -1800,7 +1800,7 @@ u8 instr_or_a_n(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 // XOR A, r8
@@ -1819,7 +1819,7 @@ u8 instr_xor_a_b(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_xor_a_c(CPU *cpu) {
@@ -1830,7 +1830,7 @@ u8 instr_xor_a_c(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_xor_a_d(CPU *cpu) {
@@ -1841,7 +1841,7 @@ u8 instr_xor_a_d(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_xor_a_e(CPU *cpu) {
@@ -1852,7 +1852,7 @@ u8 instr_xor_a_e(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_xor_a_h(CPU *cpu) {
@@ -1863,7 +1863,7 @@ u8 instr_xor_a_h(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_xor_a_l(CPU *cpu) {
@@ -1874,13 +1874,13 @@ u8 instr_xor_a_l(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_xor_a_a(CPU *cpu) {
     cpu->regs.f = FLAG_ZERO;
     cpu->regs.a = 0;
-    return 0;
+    return 4;
 }
 
 u8 instr_xor_a_mem_hl(CPU *cpu) {
@@ -1893,7 +1893,7 @@ u8 instr_xor_a_mem_hl(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 u8 instr_xor_a_n(CPU *cpu) {
@@ -1905,7 +1905,7 @@ u8 instr_xor_a_n(CPU *cpu) {
         cpu->regs.f |= FLAG_ZERO;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 // CP A, r8
@@ -1930,7 +1930,7 @@ u8 instr_cp_a_b(CPU *cpu) {
     if (check_carry_sub(a, b))
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 u8 instr_cp_a_c(CPU *cpu) {
@@ -1946,7 +1946,7 @@ u8 instr_cp_a_c(CPU *cpu) {
     if (check_carry_sub(a, c))
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 u8 instr_cp_a_d(CPU *cpu) {
@@ -1962,7 +1962,7 @@ u8 instr_cp_a_d(CPU *cpu) {
     if (check_carry_sub(a, d))
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 u8 instr_cp_a_e(CPU *cpu) {
@@ -1978,7 +1978,7 @@ u8 instr_cp_a_e(CPU *cpu) {
     if (check_carry_sub(a, e))
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 u8 instr_cp_a_h(CPU *cpu) {
@@ -1994,7 +1994,7 @@ u8 instr_cp_a_h(CPU *cpu) {
     if (check_carry_sub(a, h))
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 u8 instr_cp_a_l(CPU *cpu) {
@@ -2010,12 +2010,12 @@ u8 instr_cp_a_l(CPU *cpu) {
     if (check_carry_sub(a, l))
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 u8 instr_cp_a_a(CPU *cpu) {
     cpu->regs.f = FLAG_SUBT | FLAG_ZERO;
-    return 0;
+    return 4;
 }
 
 u8 instr_cp_a_mem_hl(CPU *cpu) {
@@ -2032,7 +2032,7 @@ u8 instr_cp_a_mem_hl(CPU *cpu) {
     if (check_carry_sub(a, value))
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 8;
 }
 
 u8 instr_cp_a_n(CPU *cpu) {
@@ -2048,7 +2048,7 @@ u8 instr_cp_a_n(CPU *cpu) {
     if (check_carry_sub(a, n))
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 8;
 }
 
 // ============================================================================
