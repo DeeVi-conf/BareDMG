@@ -954,7 +954,7 @@ u8 instr_add_a_b(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4; //adding a and b is 4 cycles and so is for c, d, e, h, k, l or a
 }
 
 u8 instr_add_a_c(CPU *cpu) {
@@ -971,7 +971,7 @@ u8 instr_add_a_c(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_add_a_d(CPU *cpu) {
@@ -988,7 +988,7 @@ u8 instr_add_a_d(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_add_a_e(CPU *cpu) {
@@ -1005,7 +1005,7 @@ u8 instr_add_a_e(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_add_a_h(CPU *cpu) {
@@ -1022,7 +1022,7 @@ u8 instr_add_a_h(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_add_a_l(CPU *cpu) {
@@ -1039,7 +1039,7 @@ u8 instr_add_a_l(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_add_a_a(CPU *cpu) {
@@ -1055,7 +1055,7 @@ u8 instr_add_a_a(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_add_a_mem_hl(CPU *cpu) {
@@ -1073,7 +1073,7 @@ u8 instr_add_a_mem_hl(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 u8 instr_add_a_n(CPU *cpu) {
@@ -1090,7 +1090,7 @@ u8 instr_add_a_n(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 // ADC A, r8
