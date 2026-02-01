@@ -42,6 +42,12 @@ typedef int64_t  i64;
 #define SET_BITS(val, start, len, bits)                                                            \
     (((val) & ~(((1U << (len)) - 1) << (start))) | (((bits) & ((1U << (len)) - 1)) << (start)))
 
+// Extract specific bits
+#define MASK_BITS(val, mask) ((val) & (mask))
+
+// Keep some bits, replace others
+#define REPLACE_BITS(old, new, mask) (((old) & ~(mask)) | ((new) & (mask)))
+
 // ---------------------------------------------
 // 16-bit Register Operations (simple macros)
 // ---------------------------------------------
@@ -73,7 +79,6 @@ bool check_carry_adc(u8 a, u8 b, u8 carry);
 // SBC instruction helpers
 bool check_half_carry_sbc(u8 a, u8 b, u8 carry);
 bool check_carry_sbc(u8 a, u8 b, u8 carry);
-
 
 // Binary Coded Decimal (BCD) adjustment for DAA instruction
 u8   adjust_bcd(u8 value, bool subtract, bool carry, bool half_carry);

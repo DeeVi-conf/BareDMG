@@ -212,7 +212,7 @@ void mmu_write(GameBoy *gb, u16 addr, u8 value) {
     }
 }
 
-// I/O Register handlers (NOTE: stubbed for now)
+// I/O Register handlers
 u8 io_read(GameBoy *gb, u16 addr) {
     switch (addr) {
         // Joypad
@@ -235,11 +235,11 @@ u8 io_read(GameBoy *gb, u16 addr) {
         case 0xFF07:
             return gb->io.tac;
 
-        // Interrupt Flag
+        // Interrupt Flag (upper 3 bits always 1)
         case 0xFF0F:
-            return gb->io.if_reg | 0xE0; // Upper bits always 1
+            return gb->io.if_reg | 0xE0;
 
-        // Sound (stubbed - return 0xFF)
+        // Sound (NOTE: stubbed)
         case 0xFF10 ... 0xFF26:
             return gb->io.sound[addr - 0xFF10];
 
@@ -247,7 +247,7 @@ u8 io_read(GameBoy *gb, u16 addr) {
         case 0xFF40:
             return gb->io.lcdc;
         case 0xFF41:
-            return gb->io.stat | 0x80; // Bit 7 always 1
+            return SET_BIT(gb->io.stat, 7); // Bit 7 always 1
         case 0xFF42:
             return gb->io.scy;
         case 0xFF43:
@@ -281,9 +281,9 @@ u8 io_read(GameBoy *gb, u16 addr) {
 
 void io_write(GameBoy *gb, u16 addr, u8 value) {
     switch (addr) {
-        // Joypad
+        // Joypad (bits 4-5 writable)
         case 0xFF00:
-            gb->io.joyp = (gb->io.joyp & 0xCF) | (value & 0x30);
+            gb->io.joyp = REPLACE_BITS(gb->io.joyp, value, 0x30);
             break;
 
         // Serial
@@ -292,19 +292,17 @@ void io_write(GameBoy *gb, u16 addr, u8 value) {
             break;
         case 0xFF02:
             gb->io.sc = value;
-            if (value & 0x80) {
-                // Serial transfer started - output character
+            if (CHECK_BIT(value, 7)) {
                 putchar(gb->io.sb);
                 fflush(stdout);
-                // Clear transfer flag and set interrupt
-                gb->io.sc &= 0x7F;
-                gb->io.if_reg |= 0x08; // Serial interrupt
+                gb->io.sc     = CLEAR_BIT(gb->io.sc, 7);
+                gb->io.if_reg = SET_BIT(gb->io.if_reg, 3);
             }
             break;
 
         // Timer
         case 0xFF04:
-            gb->io.div = 0; // Writing any value resets DIV to 0
+            gb->io.div = 0; // Any write resets to 0
             break;
         case 0xFF05:
             gb->io.tima = value;
@@ -313,15 +311,15 @@ void io_write(GameBoy *gb, u16 addr, u8 value) {
             gb->io.tma = value;
             break;
         case 0xFF07:
-            gb->io.tac = value & 0x07;
-            break; // Only lower 3 bits
-
-        // Interrupt Flag
-        case 0xFF0F:
-            gb->io.if_reg = value & 0x1F; // Only lower 5 bits writable
+            gb->io.tac = MASK_BITS(value, 0x07);
             break;
 
-        // Sound (stubbed)
+        // Interrupt Flag (only lower 5 bits writable)
+        case 0xFF0F:
+            gb->io.if_reg = MASK_BITS(value, 0x1F);
+            break;
+
+        // Sound (NOTE: stubbed)
         case 0xFF10 ... 0xFF26:
             gb->io.sound[addr - 0xFF10] = value;
             break;
@@ -331,8 +329,7 @@ void io_write(GameBoy *gb, u16 addr, u8 value) {
             gb->io.lcdc = value;
             break;
         case 0xFF41:
-            // Only bits 3-6 are writable
-            gb->io.stat = (gb->io.stat & 0x87) | (value & 0x78);
+            gb->io.stat = REPLACE_BITS(gb->io.stat, value, 0x78); // Bits 3-6 writable
             break;
         case 0xFF42:
             gb->io.scy = value;
@@ -341,18 +338,18 @@ void io_write(GameBoy *gb, u16 addr, u8 value) {
             gb->io.scx = value;
             break;
         case 0xFF44:
-            break; // LY is read-only
+            break; // Read-only
         case 0xFF45:
             gb->io.lyc = value;
             break;
-        case 0xFF46:
-            // DMA transfer - copy 0xA0 bytes from XX00-XX9F to OAM
+        case 0xFF46: {
             gb->io.dma = value;
             u16 src    = value << 8;
             for (int i = 0; i < 0xA0; i++) {
                 gb->oam[i] = mmu_read(gb, src + i);
             }
             break;
+        }
         case 0xFF47:
             gb->io.bgp = value;
             break;
@@ -375,7 +372,6 @@ void io_write(GameBoy *gb, u16 addr, u8 value) {
             break;
 
         default:
-            // Ignore writes to unmapped registers
             break;
     }
 }
