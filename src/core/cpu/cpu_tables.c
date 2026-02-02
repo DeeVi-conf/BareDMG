@@ -10,21 +10,21 @@
 // https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
 // ---------------------------------------------
 static const InstrFunc instr_table[256] = {
-    // 0x0_
+    //0x0_
     [0x00] = instr_nop,
     [0x01] = instr_ld_bc_nn,
     [0x02] = instr_ld_mem_bc_a,
     [0x03] = instr_inc_bc,
-    //[0x04] = instr_inc_b,
-    //[0x05] = instr_dec_b,
+    [0x04] = instr_inc_b,
+    [0x05] = instr_dec_b,
     [0x06] = instr_ld_b_n,
     [0x07] = instr_rlca,
     [0x08] = instr_ld_mem_a16_sp,
     [0x09] = instr_add_hl_bc,
     [0x0A] = instr_ld_a_mem_bc,
     [0x0B] = instr_dec_bc,
-    //[0x0C] = instr_inc_c,
-    //[0x0D] = instr_dec_c,
+    [0x0C] = instr_inc_c,
+    [0x0D] = instr_dec_c,
     [0x0E] = instr_ld_c_n,
     [0x0F] = instr_rrca,
 
@@ -33,16 +33,16 @@ static const InstrFunc instr_table[256] = {
     [0x11] = instr_ld_de_nn,
     [0x12] = instr_ld_mem_de_a,
     [0x13] = instr_inc_de,
-    //[0x14] = instr_inc_d,
-    //[0x15] = instr_dec_d,
+    [0x14] = instr_inc_d,
+    [0x15] = instr_dec_d,
     [0x16] = instr_ld_d_n,
     [0x17] = instr_rla,
     [0x18] = instr_jr_e8,
     [0x19] = instr_add_hl_de,
     [0x1A] = instr_ld_a_mem_de,
     [0x1B] = instr_dec_de,
-    //[0x1C] = instr_inc_e,
-    //[0x1D] = instr_dec_e,
+    [0x1C] = instr_inc_e,
+    [0x1D] = instr_dec_e,
     [0x1E] = instr_ld_e_n,
     [0x1F] = instr_rra,
 
@@ -51,16 +51,16 @@ static const InstrFunc instr_table[256] = {
     [0x21] = instr_ld_hl_nn,
     [0x22] = instr_ld_mem_hli_a,
     [0x23] = instr_inc_hl,
-    //[0x24] = instr_inc_h,
-    //[0x25] = instr_dec_h,
+    [0x24] = instr_inc_h,
+    [0x25] = instr_dec_h,
     [0x26] = instr_ld_h_n,
     [0x27] = instr_daa,
     [0x28] = instr_jr_z_e8,
     [0x29] = instr_add_hl_hl,
     [0x2A] = instr_ld_a_mem_hli,
     [0x2B] = instr_dec_hl,
-    //[0x2C] = instr_inc_l,
-    //[0x2D] = instr_dec_l,
+    [0x2C] = instr_inc_l,
+    [0x2D] = instr_dec_l,
     [0x2E] = instr_ld_l_n,
     [0x2F] = instr_cpl,
 
@@ -69,16 +69,16 @@ static const InstrFunc instr_table[256] = {
     [0x31] = instr_ld_sp_nn,
     [0x32] = instr_ld_mem_hld_a,
     [0x33] = instr_inc_sp,
-    //[0x34] = instr_inc_mem_hl,
-    //[0x35] = instr_dec_mem_hl,
+    [0x34] = instr_inc_mem_hl,
+    [0x35] = instr_dec_mem_hl,
     [0x36] = instr_ld_mem_hl_n,
     [0x37] = instr_scf,
     [0x38] = instr_jr_c_e8,
     [0x39] = instr_add_hl_sp,
     [0x3A] = instr_ld_a_mem_hld,
     [0x3B] = instr_dec_sp,
-    //[0x3C] = instr_inc_a,
-    //[0x3D] = instr_dec_a,
+    [0x3C] = instr_inc_a,
+    [0x3D] = instr_dec_a,
     [0x3E] = instr_ld_a_n,
     [0x3F] = instr_ccf,
 
@@ -155,14 +155,14 @@ static const InstrFunc instr_table[256] = {
     [0x7F] = instr_ld_a_a,
 
     // 0x8_
-    //[0x80] = instr_add_a_b,
-    //[0x81] = instr_add_a_c,
-    //[0x82] = instr_add_a_d,
-    //[0x83] = instr_add_a_e,
-    //[0x84] = instr_add_a_h,
-    //[0x85] = instr_add_a_l,
-    //[0x86] = instr_add_a_mem_hl,
-    //[0x87] = instr_add_a_a,
+    [0x80] = instr_add_a_b,
+    [0x81] = instr_add_a_c,
+    [0x82] = instr_add_a_d,
+    [0x83] = instr_add_a_e,
+    [0x84] = instr_add_a_h,
+    [0x85] = instr_add_a_l,
+    [0x86] = instr_add_a_mem_hl,
+    [0x87] = instr_add_a_a,
     [0x88] = instr_adc_a_b,
     [0x89] = instr_adc_a_c,
     [0x8A] = instr_adc_a_d,
@@ -173,15 +173,14 @@ static const InstrFunc instr_table[256] = {
     [0x8F] = instr_adc_a_a,
 
     // 0x9_
-    /* [0x90] = instr_sub_a_b,
+    [0x90] = instr_sub_a_b,
     [0x91] = instr_sub_a_c,
     [0x92] = instr_sub_a_d,
     [0x93] = instr_sub_a_e,
     [0x94] = instr_sub_a_h,
     [0x95] = instr_sub_a_l,
     [0x96] = instr_sub_a_mem_hl,
-    [0x97] = instr_sub_a_a, */
-    [0x98] = instr_sbc_a_b,
+    [0x97] = instr_sub_a_a,    [0x98] = instr_sbc_a_b,
     [0x99] = instr_sbc_a_c,
     [0x9A] = instr_sbc_a_d,
     [0x9B] = instr_sbc_a_e,
@@ -191,7 +190,7 @@ static const InstrFunc instr_table[256] = {
     [0x9F] = instr_sbc_a_a,
 
     // 0xA_
-    /* [0xA0] = instr_and_a_b,
+    [0xA0] = instr_and_a_b,
     [0xA1] = instr_and_a_c,
     [0xA2] = instr_and_a_d,
     [0xA3] = instr_and_a_e,
@@ -206,10 +205,10 @@ static const InstrFunc instr_table[256] = {
     [0xAC] = instr_xor_a_h,
     [0xAD] = instr_xor_a_l,
     [0xAE] = instr_xor_a_mem_hl,
-    [0xAF] = instr_xor_a_a, */
+    [0xAF] = instr_xor_a_a,
 
     // 0xB_
-    /*[0xB0] = instr_or_a_b,
+    [0xB0] = instr_or_a_b,
     [0xB1] = instr_or_a_c,
     [0xB2] = instr_or_a_d,
     [0xB3] = instr_or_a_e,
@@ -224,7 +223,7 @@ static const InstrFunc instr_table[256] = {
     [0xBC] = instr_cp_a_h,
     [0xBD] = instr_cp_a_l,
     [0xBE] = instr_cp_a_mem_hl,
-    [0xBF] = instr_cp_a_a, */
+    [0xBF] = instr_cp_a_a,
 
     // 0xC_
     [0xC0] = instr_ret_nz,
@@ -298,7 +297,7 @@ static const InstrFunc instr_table[256] = {
     [0xFE] = instr_cp_a_n,
     [0xFF] = instr_rst_38,
 };
-
+#if 0
 // ---------------------------------------------
 // Cycle counts for each instruction
 // ---------------------------------------------
@@ -404,6 +403,8 @@ static const u8 instr_cycles[256] = {
     [0xFC] = ILLEGAL, [0xFD] = ILLEGAL, [0xFE] = 8,  [0xFF] = 16,
 };
 
+#endif
+
 // ---------------------------------------------
 // Execute an instruction
 // Called by cpu_step()
@@ -414,16 +415,5 @@ u8 cpu_execute(CPU *cpu, u8 opcode) {
         fprintf(stderr, "Illegal Operation Code: 0x%02x at PC = 0x%04x\n", opcode, cpu->pc - 1);
         return ILLEGAL;
     }
-
-    // If the returned val is not 0
-    // Cycle count is returned
-    u8 cycle_count = instr_table[opcode](cpu);
-    if (!cycle_count) {
-        return cycle_count;
-    }
-
-    // Otherwise, use the val from the table above
-    return instr_cycles[opcode];
-
-    // TODO: Might remove the table above and keep return cycle count from functions
+    return instr_table[opcode](cpu);
 }

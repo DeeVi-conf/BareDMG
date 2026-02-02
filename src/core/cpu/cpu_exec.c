@@ -10,7 +10,7 @@
 // ============================================================================
 u8 instr_nop(CPU *cpu) {
     (void)cpu;
-    return 0;
+    return 4;
 }
 
 // NOTE: Full STOP implementation requires joypad
@@ -31,7 +31,7 @@ u8 instr_stop(CPU *cpu) {
     // - Stop LCD display
     // - Wake on button press
 
-    return 0;
+    return 4;
 }
 
 u8 instr_halt(CPU *cpu) {
@@ -42,19 +42,19 @@ u8 instr_halt(CPU *cpu) {
     // - Wakes up when interrupt occurs (even if IME is disabled)
     // - If IME is enabled, interrupt handler runs
     // - If IME is disabled, execution continues after HALT
-    return 0;
+    return 4;
 }
 
 // Disable interrupts
 u8 instr_di(CPU *cpu) {
     cpu->ime = false;
-    return 0;
+    return 4;
 }
 
 // Enable interrupts
 u8 instr_ei(CPU *cpu) {
     cpu->ime_scheduled = true; // Set after NEXT instruction
-    return 0;
+    return 4;
 }
 
 // TODO: When implementing extended instruction set
@@ -67,283 +67,283 @@ u8 instr_ei(CPU *cpu) {
 // Immediate loads
 u8 instr_ld_b_n(CPU *cpu) {
     cpu->regs.b = mmu_read(cpu->gb, cpu->pc++);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_c_n(CPU *cpu) {
     cpu->regs.c = mmu_read(cpu->gb, cpu->pc++);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_d_n(CPU *cpu) {
     cpu->regs.d = mmu_read(cpu->gb, cpu->pc++);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_e_n(CPU *cpu) {
     cpu->regs.e = mmu_read(cpu->gb, cpu->pc++);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_h_n(CPU *cpu) {
     cpu->regs.h = mmu_read(cpu->gb, cpu->pc++);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_l_n(CPU *cpu) {
     cpu->regs.l = mmu_read(cpu->gb, cpu->pc++);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_a_n(CPU *cpu) {
     cpu->regs.a = mmu_read(cpu->gb, cpu->pc++);
-    return 0;
+    return 8;
 }
 
 // Register <-> Register
 u8 instr_ld_b_b(CPU *cpu) {
     cpu->regs.b = cpu->regs.b;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_b_c(CPU *cpu) {
     cpu->regs.b = cpu->regs.c;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_b_d(CPU *cpu) {
     cpu->regs.b = cpu->regs.d;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_b_e(CPU *cpu) {
     cpu->regs.b = cpu->regs.e;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_b_h(CPU *cpu) {
     cpu->regs.b = cpu->regs.h;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_b_l(CPU *cpu) {
     cpu->regs.b = cpu->regs.l;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_b_a(CPU *cpu) {
     cpu->regs.b = cpu->regs.a;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_c_b(CPU *cpu) {
     cpu->regs.c = cpu->regs.b;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_c_c(CPU *cpu) {
     cpu->regs.c = cpu->regs.c;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_c_d(CPU *cpu) {
     cpu->regs.c = cpu->regs.d;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_c_e(CPU *cpu) {
     cpu->regs.c = cpu->regs.e;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_c_h(CPU *cpu) {
     cpu->regs.c = cpu->regs.h;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_c_l(CPU *cpu) {
     cpu->regs.c = cpu->regs.l;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_c_a(CPU *cpu) {
     cpu->regs.c = cpu->regs.a;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_d_b(CPU *cpu) {
     cpu->regs.d = cpu->regs.b;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_d_c(CPU *cpu) {
     cpu->regs.d = cpu->regs.c;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_d_d(CPU *cpu) {
     cpu->regs.d = cpu->regs.d;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_d_e(CPU *cpu) {
     cpu->regs.d = cpu->regs.e;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_d_h(CPU *cpu) {
     cpu->regs.d = cpu->regs.h;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_d_l(CPU *cpu) {
     cpu->regs.d = cpu->regs.l;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_d_a(CPU *cpu) {
     cpu->regs.d = cpu->regs.a;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_e_b(CPU *cpu) {
     cpu->regs.e = cpu->regs.b;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_e_c(CPU *cpu) {
     cpu->regs.e = cpu->regs.c;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_e_d(CPU *cpu) {
     cpu->regs.e = cpu->regs.d;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_e_e(CPU *cpu) {
     cpu->regs.e = cpu->regs.e;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_e_h(CPU *cpu) {
     cpu->regs.e = cpu->regs.h;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_e_l(CPU *cpu) {
     cpu->regs.e = cpu->regs.l;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_e_a(CPU *cpu) {
     cpu->regs.e = cpu->regs.a;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_h_b(CPU *cpu) {
     cpu->regs.h = cpu->regs.b;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_h_c(CPU *cpu) {
     cpu->regs.h = cpu->regs.c;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_h_d(CPU *cpu) {
     cpu->regs.h = cpu->regs.d;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_h_e(CPU *cpu) {
     cpu->regs.h = cpu->regs.e;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_h_h(CPU *cpu) {
     cpu->regs.h = cpu->regs.h;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_h_l(CPU *cpu) {
     cpu->regs.h = cpu->regs.l;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_h_a(CPU *cpu) {
     cpu->regs.h = cpu->regs.a;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_l_b(CPU *cpu) {
     cpu->regs.l = cpu->regs.b;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_l_c(CPU *cpu) {
     cpu->regs.l = cpu->regs.c;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_l_d(CPU *cpu) {
     cpu->regs.l = cpu->regs.d;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_l_e(CPU *cpu) {
     cpu->regs.l = cpu->regs.e;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_l_h(CPU *cpu) {
     cpu->regs.l = cpu->regs.h;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_l_l(CPU *cpu) {
     cpu->regs.l = cpu->regs.l;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_l_a(CPU *cpu) {
     cpu->regs.l = cpu->regs.a;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_a_b(CPU *cpu) {
     cpu->regs.a = cpu->regs.b;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_a_c(CPU *cpu) {
     cpu->regs.a = cpu->regs.c;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_a_d(CPU *cpu) {
     cpu->regs.a = cpu->regs.d;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_a_e(CPU *cpu) {
     cpu->regs.a = cpu->regs.e;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_a_h(CPU *cpu) {
     cpu->regs.a = cpu->regs.h;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_a_l(CPU *cpu) {
     cpu->regs.a = cpu->regs.l;
-    return 0;
+    return 4;
 }
 
 u8 instr_ld_a_a(CPU *cpu) {
     cpu->regs.a = cpu->regs.a;
-    return 0;
+    return 4;
 }
 
 // =================================
@@ -354,86 +354,86 @@ u8 instr_ld_a_a(CPU *cpu) {
 u8 instr_ld_b_mem_hl(CPU *cpu) {
     u16 addr    = cpu_read_hl(cpu);
     cpu->regs.b = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_c_mem_hl(CPU *cpu) {
     u16 addr    = cpu_read_hl(cpu);
     cpu->regs.c = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_d_mem_hl(CPU *cpu) {
     u16 addr    = cpu_read_hl(cpu);
     cpu->regs.d = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_e_mem_hl(CPU *cpu) {
     u16 addr    = cpu_read_hl(cpu);
     cpu->regs.e = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_h_mem_hl(CPU *cpu) {
     u16 addr    = cpu_read_hl(cpu);
     cpu->regs.h = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_l_mem_hl(CPU *cpu) {
     u16 addr    = cpu_read_hl(cpu);
     cpu->regs.l = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_a_mem_hl(CPU *cpu) {
     u16 addr    = cpu_read_hl(cpu);
     cpu->regs.a = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 // [hl] <- register
 u8 instr_ld_mem_hl_b(CPU *cpu) {
     u16 addr = cpu_read_hl(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.b);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_mem_hl_c(CPU *cpu) {
     u16 addr = cpu_read_hl(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.c);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_mem_hl_d(CPU *cpu) {
     u16 addr = cpu_read_hl(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.d);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_mem_hl_e(CPU *cpu) {
     u16 addr = cpu_read_hl(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.e);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_mem_hl_h(CPU *cpu) {
     u16 addr = cpu_read_hl(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.h);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_mem_hl_l(CPU *cpu) {
     u16 addr = cpu_read_hl(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.l);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_mem_hl_a(CPU *cpu) {
     u16 addr = cpu_read_hl(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.a);
-    return 0;
+    return 8;
 }
 
 // [hl] <- immediate (n)
@@ -441,7 +441,7 @@ u8 instr_ld_mem_hl_n(CPU *cpu) {
     u16 addr  = cpu_read_hl(cpu);
     u8  value = mmu_read(cpu->gb, cpu->pc++); // Read immediate value
     mmu_write(cpu->gb, addr, value);
-    return 0;
+    return 12;
 }
 
 // ld hl, sp+e8
@@ -462,13 +462,13 @@ u8 instr_ld_hl_sp_e8(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu_write_hl(cpu, result);
-    return 0;
+    return 12;
 }
 
 // ld sp, hl
 u8 instr_ld_sp_hl(CPU *cpu) {
     cpu->sp = cpu_read_hl(cpu);
-    return 0;
+    return 8;
 }
 
 // =================================
@@ -477,25 +477,25 @@ u8 instr_ld_sp_hl(CPU *cpu) {
 u8 instr_ld_mem_bc_a(CPU *cpu) {
     u16 addr = cpu_read_bc(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.a);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_mem_de_a(CPU *cpu) {
     u16 addr = cpu_read_de(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.a);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_a_mem_bc(CPU *cpu) {
     u16 addr    = cpu_read_bc(cpu);
     cpu->regs.a = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 u8 instr_ld_a_mem_de(CPU *cpu) {
     u16 addr    = cpu_read_de(cpu);
     cpu->regs.a = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 // https://rgbds.gbdev.io/docs/v1.0.1/gbz80.7#LD__HLI_,A
@@ -504,7 +504,7 @@ u8 instr_ld_mem_hli_a(CPU *cpu) {
     u16 addr = cpu_read_hl(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.a);
     cpu_write_hl(cpu, addr + 1); // Increment hl
-    return 0;
+    return 8;
 }
 
 // [hl] <- a and then decrement hl
@@ -512,7 +512,7 @@ u8 instr_ld_mem_hld_a(CPU *cpu) {
     u16 addr = cpu_read_hl(cpu);
     mmu_write(cpu->gb, addr, cpu->regs.a);
     cpu_write_hl(cpu, addr - 1); // Decrement hl
-    return 0;
+    return 8;
 }
 
 // a <- [hl] and then decrement hl
@@ -521,7 +521,7 @@ u8 instr_ld_a_mem_hld(CPU *cpu) {
     u8  value   = mmu_read(cpu->gb, addr);
     cpu->regs.a = value;
     cpu_write_hl(cpu, addr - 1); // Decrement HL
-    return 0;
+    return 8;
 }
 
 // a <- [hl] and then increment hl
@@ -530,7 +530,7 @@ u8 instr_ld_a_mem_hli(CPU *cpu) {
     u8  value   = mmu_read(cpu->gb, addr);
     cpu->regs.a = value;
     cpu_write_hl(cpu, addr + 1); // Increment HL
-    return 0;
+    return 8;
 }
 
 // [0xFF00 + a8] <- a
@@ -538,7 +538,7 @@ u8 instr_ldh_mem_a8_a(CPU *cpu) {
     u8  offset = mmu_read(cpu->gb, cpu->pc++);
     u16 addr   = 0xFF00 + offset;
     mmu_write(cpu->gb, addr, cpu->regs.a);
-    return 0;
+    return 12;
 }
 
 // [0xFF00 + c] <- a
@@ -546,7 +546,7 @@ u8 instr_ldh_mem_c_a(CPU *cpu) {
     u8  offset = cpu->regs.c;
     u16 addr   = 0xFF00 + offset;
     mmu_write(cpu->gb, addr, cpu->regs.a);
-    return 0;
+    return 8;
 }
 
 // a <- [0xFF00 + a8]
@@ -554,7 +554,7 @@ u8 instr_ldh_a_mem_a8(CPU *cpu) {
     u8  offset  = mmu_read(cpu->gb, cpu->pc++);
     u16 addr    = 0xFF00 + offset;
     cpu->regs.a = mmu_read(cpu->gb, addr);
-    return 0;
+    return 12;
 }
 
 // a <- [0xFF00 + c]
@@ -562,7 +562,7 @@ u8 instr_ldh_a_mem_c(CPU *cpu) {
     u8  offset  = cpu->regs.c;
     u16 addr    = 0xFF00 + offset;
     cpu->regs.a = mmu_read(cpu->gb, addr);
-    return 0;
+    return 8;
 }
 
 // [a16] <- a
@@ -571,7 +571,7 @@ u8 instr_ld_mem_a16_a(CPU *cpu) {
     u8  hi   = mmu_read(cpu->gb, cpu->pc++);
     u16 addr = MAKE_U16(hi, lo);
     mmu_write(cpu->gb, addr, cpu->regs.a);
-    return 0;
+    return 16;
 }
 
 // a <- [a16]
@@ -580,7 +580,7 @@ u8 instr_ld_a_mem_a16(CPU *cpu) {
     u8  hi      = mmu_read(cpu->gb, cpu->pc++);
     u16 addr    = MAKE_U16(hi, lo);
     cpu->regs.a = mmu_read(cpu->gb, addr);
-    return 0;
+    return 16;
 }
 
 // [a16] <- SP
@@ -594,7 +594,7 @@ u8 instr_ld_mem_a16_sp(CPU *cpu) {
     mmu_write(cpu->gb, addr, GET_LOW_BYTE(sp));
     mmu_write(cpu->gb, addr + 1, GET_HIGH_BYTE(sp));
 
-    return 0;
+    return 20;
 }
 
 // ============================================================================
@@ -605,28 +605,28 @@ u8 instr_ld_bc_nn(CPU *cpu) {
     u8 lo = mmu_read(cpu->gb, cpu->pc++);
     u8 hi = mmu_read(cpu->gb, cpu->pc++);
     cpu_write_bc(cpu, MAKE_U16(hi, lo));
-    return 0;
+    return 12;
 }
 
 u8 instr_ld_de_nn(CPU *cpu) {
     u8 lo = mmu_read(cpu->gb, cpu->pc++);
     u8 hi = mmu_read(cpu->gb, cpu->pc++);
     cpu_write_de(cpu, MAKE_U16(hi, lo));
-    return 0;
+    return 12;
 }
 
 u8 instr_ld_hl_nn(CPU *cpu) {
     u8 lo = mmu_read(cpu->gb, cpu->pc++);
     u8 hi = mmu_read(cpu->gb, cpu->pc++);
     cpu_write_hl(cpu, MAKE_U16(hi, lo));
-    return 0;
+    return 12;
 }
 
 u8 instr_ld_sp_nn(CPU *cpu) {
     u8 lo   = mmu_read(cpu->gb, cpu->pc++);
     u8 hi   = mmu_read(cpu->gb, cpu->pc++);
     cpu->sp = MAKE_U16(hi, lo);
-    return 0;
+    return 12;
 }
 
 // ============================================================================
@@ -1118,7 +1118,7 @@ u8 instr_adc_a_b(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_adc_a_c(CPU *cpu) {
@@ -1136,7 +1136,7 @@ u8 instr_adc_a_c(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_adc_a_d(CPU *cpu) {
@@ -1154,7 +1154,7 @@ u8 instr_adc_a_d(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_adc_a_e(CPU *cpu) {
@@ -1172,7 +1172,7 @@ u8 instr_adc_a_e(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_adc_a_h(CPU *cpu) {
@@ -1190,7 +1190,7 @@ u8 instr_adc_a_h(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_adc_a_l(CPU *cpu) {
@@ -1208,7 +1208,7 @@ u8 instr_adc_a_l(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_adc_a_a(CPU *cpu) {
@@ -1225,7 +1225,7 @@ u8 instr_adc_a_a(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_adc_a_mem_hl(CPU *cpu) {
@@ -1244,7 +1244,7 @@ u8 instr_adc_a_mem_hl(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 u8 instr_adc_a_n(CPU *cpu) {
@@ -1262,7 +1262,7 @@ u8 instr_adc_a_n(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 // SUB A, r8
@@ -1439,7 +1439,7 @@ u8 instr_sbc_a_b(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_sbc_a_c(CPU *cpu) {
@@ -1457,7 +1457,7 @@ u8 instr_sbc_a_c(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_sbc_a_d(CPU *cpu) {
@@ -1475,7 +1475,7 @@ u8 instr_sbc_a_d(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_sbc_a_e(CPU *cpu) {
@@ -1493,7 +1493,7 @@ u8 instr_sbc_a_e(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_sbc_a_h(CPU *cpu) {
@@ -1511,7 +1511,7 @@ u8 instr_sbc_a_h(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_sbc_a_l(CPU *cpu) {
@@ -1529,7 +1529,7 @@ u8 instr_sbc_a_l(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_sbc_a_a(CPU *cpu) {
@@ -1546,7 +1546,7 @@ u8 instr_sbc_a_a(CPU *cpu) {
     }
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
 
 u8 instr_sbc_a_mem_hl(CPU *cpu) {
@@ -1565,7 +1565,7 @@ u8 instr_sbc_a_mem_hl(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 u8 instr_sbc_a_n(CPU *cpu) {
@@ -1583,7 +1583,7 @@ u8 instr_sbc_a_n(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 8;
 }
 
 // ============================================================================
@@ -2081,7 +2081,7 @@ u8 instr_add_hl_bc(CPU *cpu) {
 
     cpu->regs.f |= old_flag; // Restore Z flag
     cpu_write_hl(cpu, result);
-    return 0;
+    return 8;
 }
 
 u8 instr_add_hl_de(CPU *cpu) {
@@ -2100,7 +2100,7 @@ u8 instr_add_hl_de(CPU *cpu) {
 
     cpu->regs.f |= old_flag; // Restore Z flag
     cpu_write_hl(cpu, result);
-    return 0;
+    return 8;
 }
 
 u8 instr_add_hl_hl(CPU *cpu) {
@@ -2118,7 +2118,7 @@ u8 instr_add_hl_hl(CPU *cpu) {
 
     cpu->regs.f |= old_flag; // Restore Z flag
     cpu_write_hl(cpu, result);
-    return 0;
+    return 8;
 }
 
 u8 instr_add_hl_sp(CPU *cpu) {
@@ -2137,7 +2137,7 @@ u8 instr_add_hl_sp(CPU *cpu) {
 
     cpu->regs.f |= old_flag; // Restore Z flag
     cpu_write_hl(cpu, result);
-    return 0;
+    return 8;
 }
 
 // add sp, e8
@@ -2163,7 +2163,7 @@ u8 instr_add_sp_e8(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->sp = result;
-    return 0;
+    return 16;
 }
 
 // INC r16
@@ -2173,24 +2173,24 @@ u8 instr_add_sp_e8(CPU *cpu) {
 u8 instr_inc_bc(CPU *cpu) {
     u16 bc = cpu_read_bc(cpu);
     cpu_write_bc(cpu, ++bc);
-    return 0;
+    return 8;
 }
 
 u8 instr_inc_de(CPU *cpu) {
     u16 de = cpu_read_de(cpu);
     cpu_write_de(cpu, ++de);
-    return 0;
+    return 8;
 }
 
 u8 instr_inc_hl(CPU *cpu) {
     u16 hl = cpu_read_hl(cpu);
     cpu_write_hl(cpu, ++hl);
-    return 0;
+    return 8;
 }
 
 u8 instr_inc_sp(CPU *cpu) {
     cpu->sp++;
-    return 0;
+    return 8;
 }
 
 // DEC r16
@@ -2200,24 +2200,24 @@ u8 instr_inc_sp(CPU *cpu) {
 u8 instr_dec_bc(CPU *cpu) {
     u16 bc = cpu_read_bc(cpu);
     cpu_write_bc(cpu, --bc);
-    return 0;
+    return 8;
 }
 
 u8 instr_dec_de(CPU *cpu) {
     u16 de = cpu_read_de(cpu);
     cpu_write_de(cpu, --de);
-    return 0;
+    return 8;
 }
 
 u8 instr_dec_hl(CPU *cpu) {
     u16 hl = cpu_read_hl(cpu);
     cpu_write_hl(cpu, --hl);
-    return 0;
+    return 8;
 }
 
 u8 instr_dec_sp(CPU *cpu) {
     cpu->sp--;
-    return 0;
+    return 8;
 }
 
 // ============================================================================
@@ -2235,7 +2235,7 @@ u8 instr_push_bc(CPU *cpu) {
     mmu_write(cpu->gb, cpu->sp, cpu->regs.b);
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, cpu->regs.c);
-    return 0;
+    return 16;
 }
 
 u8 instr_push_de(CPU *cpu) {
@@ -2243,7 +2243,7 @@ u8 instr_push_de(CPU *cpu) {
     mmu_write(cpu->gb, cpu->sp, cpu->regs.d);
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, cpu->regs.e);
-    return 0;
+    return 16;
 }
 
 u8 instr_push_hl(CPU *cpu) {
@@ -2251,7 +2251,7 @@ u8 instr_push_hl(CPU *cpu) {
     mmu_write(cpu->gb, cpu->sp, cpu->regs.h);
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, cpu->regs.l);
-    return 0;
+    return 16;
 }
 
 u8 instr_push_af(CPU *cpu) {
@@ -2259,7 +2259,7 @@ u8 instr_push_af(CPU *cpu) {
     mmu_write(cpu->gb, cpu->sp, cpu->regs.a);
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, cpu->regs.f);
-    return 0;
+    return 16;
 }
 
 // POP r16
@@ -2270,25 +2270,25 @@ u8 instr_push_af(CPU *cpu) {
 u8 instr_pop_bc(CPU *cpu) {
     cpu->regs.c = mmu_read(cpu->gb, cpu->sp++);
     cpu->regs.b = mmu_read(cpu->gb, cpu->sp++);
-    return 0;
+    return 12;
 }
 
 u8 instr_pop_de(CPU *cpu) {
     cpu->regs.e = mmu_read(cpu->gb, cpu->sp++);
     cpu->regs.d = mmu_read(cpu->gb, cpu->sp++);
-    return 0;
+    return 12;
 }
 
 u8 instr_pop_hl(CPU *cpu) {
     cpu->regs.l = mmu_read(cpu->gb, cpu->sp++);
     cpu->regs.h = mmu_read(cpu->gb, cpu->sp++);
-    return 0;
+    return 12;
 }
 
 u8 instr_pop_af(CPU *cpu) {
     cpu->regs.f = mmu_read(cpu->gb, cpu->sp++);
     cpu->regs.a = mmu_read(cpu->gb, cpu->sp++);
-    return 0;
+    return 12;
 }
 
 // Restart Vectors
@@ -2298,7 +2298,7 @@ u8 instr_rst_00(CPU *cpu) {
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
     cpu->pc = 0x00;
-    return 0;
+    return 16;
 }
 
 u8 instr_rst_08(CPU *cpu) {
@@ -2307,7 +2307,7 @@ u8 instr_rst_08(CPU *cpu) {
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
     cpu->pc = 0x08;
-    return 0;
+    return 16;
 }
 
 u8 instr_rst_10(CPU *cpu) {
@@ -2316,7 +2316,7 @@ u8 instr_rst_10(CPU *cpu) {
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
     cpu->pc = 0x10;
-    return 0;
+    return 16;
 }
 
 u8 instr_rst_18(CPU *cpu) {
@@ -2325,7 +2325,7 @@ u8 instr_rst_18(CPU *cpu) {
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
     cpu->pc = 0x18;
-    return 0;
+    return 16;
 }
 
 u8 instr_rst_20(CPU *cpu) {
@@ -2334,7 +2334,7 @@ u8 instr_rst_20(CPU *cpu) {
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
     cpu->pc = 0x20;
-    return 0;
+    return 16;
 }
 
 u8 instr_rst_28(CPU *cpu) {
@@ -2343,7 +2343,7 @@ u8 instr_rst_28(CPU *cpu) {
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
     cpu->pc = 0x28;
-    return 0;
+    return 16;
 }
 
 u8 instr_rst_30(CPU *cpu) {
@@ -2352,7 +2352,7 @@ u8 instr_rst_30(CPU *cpu) {
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
     cpu->pc = 0x30;
-    return 0;
+    return 16;
 }
 
 u8 instr_rst_38(CPU *cpu) {
@@ -2361,7 +2361,7 @@ u8 instr_rst_38(CPU *cpu) {
     cpu->sp--;
     mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
     cpu->pc = 0x38;
-    return 0;
+    return 16;
 }
 
 // ============================================================================
@@ -2378,7 +2378,7 @@ u8 instr_jp_a16(CPU *cpu) {
     u8 lo   = mmu_read(cpu->gb, cpu->pc++);
     u8 hi   = mmu_read(cpu->gb, cpu->pc++);
     cpu->pc = MAKE_U16(hi, lo);
-    return 0;
+    return 16;
 }
 
 // JP HL
@@ -2388,7 +2388,7 @@ u8 instr_jp_a16(CPU *cpu) {
 // ----------------------------------------------
 u8 instr_jp_hl(CPU *cpu) {
     cpu->pc = cpu_read_hl(cpu);
-    return 0;
+    return 4;
 }
 
 // JP cc a16
@@ -2404,7 +2404,7 @@ u8 instr_jp_nz_a16(CPU *cpu) {
 
     if (!cpu_get_flag(cpu, FLAG_ZERO)) {
         cpu->pc = MAKE_U16(hi, lo);
-        return 0;
+        return 16;
     }
 
     return 12;
@@ -2416,7 +2416,7 @@ u8 instr_jp_z_a16(CPU *cpu) {
 
     if (cpu_get_flag(cpu, FLAG_ZERO)) {
         cpu->pc = MAKE_U16(hi, lo);
-        return 0;
+        return 16;
     }
     return 12;
 }
@@ -2427,7 +2427,7 @@ u8 instr_jp_nc_a16(CPU *cpu) {
 
     if (!cpu_get_flag(cpu, FLAG_CARRY)) {
         cpu->pc = MAKE_U16(hi, lo);
-        return 0;
+        return 16;
     }
     return 12;
 }
@@ -2438,7 +2438,7 @@ u8 instr_jp_c_a16(CPU *cpu) {
 
     if (cpu_get_flag(cpu, FLAG_CARRY)) {
         cpu->pc = MAKE_U16(hi, lo);
-        return 0;
+        return 16;
     }
     return 12;
 }
@@ -2451,7 +2451,7 @@ u8 instr_jp_c_a16(CPU *cpu) {
 u8 instr_jr_e8(CPU *cpu) {
     i8 offset = (i8)mmu_read(cpu->gb, cpu->pc++);
     cpu->pc += offset;
-    return 0;
+    return 12;
 }
 
 // JR cc e8
@@ -2466,7 +2466,7 @@ u8 instr_jr_nz_e8(CPU *cpu) {
 
     if (!cpu_get_flag(cpu, FLAG_ZERO)) {
         cpu->pc += offset;
-        return 0;
+        return 12;
     }
 
     return 8;
@@ -2477,7 +2477,7 @@ u8 instr_jr_z_e8(CPU *cpu) {
 
     if (cpu_get_flag(cpu, FLAG_ZERO)) {
         cpu->pc += offset;
-        return 0;
+        return 12;
     }
 
     return 8;
@@ -2488,7 +2488,7 @@ u8 instr_jr_nc_e8(CPU *cpu) {
 
     if (!cpu_get_flag(cpu, FLAG_CARRY)) {
         cpu->pc += offset;
-        return 0;
+        return 12;
     }
 
     return 8;
@@ -2499,7 +2499,7 @@ u8 instr_jr_c_e8(CPU *cpu) {
 
     if (cpu_get_flag(cpu, FLAG_CARRY)) {
         cpu->pc += offset;
-        return 0;
+        return 12;
     }
 
     return 8;
@@ -2523,7 +2523,7 @@ u8 instr_call_a16(CPU *cpu) {
 
     // Update the pc
     cpu->pc = addr;
-    return 0;
+    return 16;
 }
 
 // JP cc a16
@@ -2545,7 +2545,7 @@ u8 instr_call_nz_a16(CPU *cpu) {
         mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
 
         cpu->pc = addr;
-        return 0;
+        return 24;
     }
     return 12;
 }
@@ -2562,7 +2562,7 @@ u8 instr_call_z_a16(CPU *cpu) {
         mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
 
         cpu->pc = addr;
-        return 0;
+        return 24;
     }
     return 12;
 }
@@ -2579,7 +2579,7 @@ u8 instr_call_nc_a16(CPU *cpu) {
         mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
 
         cpu->pc = addr;
-        return 0;
+        return 24;
     }
     return 12;
 }
@@ -2596,7 +2596,7 @@ u8 instr_call_c_a16(CPU *cpu) {
         mmu_write(cpu->gb, cpu->sp, GET_LOW_BYTE(cpu->pc));
 
         cpu->pc = addr;
-        return 0;
+        return 24;
     }
     return 12;
 }
@@ -2611,7 +2611,7 @@ u8 instr_ret(CPU *cpu) {
     u8 hi   = mmu_read(cpu->gb, cpu->pc++);
 
     cpu->pc = MAKE_U16(hi, lo);
-    return 0;
+    return 16;
 }
 
 // RET cc
@@ -2626,7 +2626,7 @@ u8 instr_ret_nz(CPU *cpu) {
         u8 lo   = mmu_read(cpu->gb, cpu->sp++);
         u8 hi   = mmu_read(cpu->gb, cpu->sp++);
         cpu->pc = MAKE_U16(hi, lo);
-        return 0;
+        return 20;
     }
     return 8;
 }
@@ -2636,7 +2636,7 @@ u8 instr_ret_z(CPU *cpu) {
         u8 lo   = mmu_read(cpu->gb, cpu->sp++);
         u8 hi   = mmu_read(cpu->gb, cpu->sp++);
         cpu->pc = MAKE_U16(hi, lo);
-        return 0;
+        return 20;
     }
     return 8;
 }
@@ -2646,7 +2646,7 @@ u8 instr_ret_nc(CPU *cpu) {
         u8 lo   = mmu_read(cpu->gb, cpu->sp++);
         u8 hi   = mmu_read(cpu->gb, cpu->sp++);
         cpu->pc = MAKE_U16(hi, lo);
-        return 0;
+        return 20;
     }
     return 8;
 }
@@ -2656,7 +2656,7 @@ u8 instr_ret_c(CPU *cpu) {
         u8 lo   = mmu_read(cpu->gb, cpu->sp++);
         u8 hi   = mmu_read(cpu->gb, cpu->sp++);
         cpu->pc = MAKE_U16(hi, lo);
-        return 0;
+        return 20;
     }
     return 8;
 }
@@ -2667,7 +2667,7 @@ u8 instr_reti(CPU *cpu) {
     u8 hi    = mmu_read(cpu->gb, cpu->sp++);
     cpu->pc  = MAKE_U16(hi, lo);
     cpu->ime = true;
-    return 0;
+    return 16;
 }
 
 // ============================================================================
@@ -2691,7 +2691,7 @@ u8 instr_rlca(CPU *cpu) {
     if (carry)
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 // RRCA
@@ -2710,7 +2710,7 @@ u8 instr_rrca(CPU *cpu) {
     if (carry)
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 // RLA
@@ -2730,7 +2730,7 @@ u8 instr_rla(CPU *cpu) {
     if (new_carry)
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 // RRA
@@ -2750,7 +2750,7 @@ u8 instr_rra(CPU *cpu) {
     if (new_carry)
         cpu->regs.f |= FLAG_CARRY;
 
-    return 0;
+    return 4;
 }
 
 // CPL
@@ -2760,7 +2760,7 @@ u8 instr_rra(CPU *cpu) {
 u8 instr_cpl(CPU *cpu) {
     cpu->regs.a ^= 0xFF;
     cpu->regs.f |= FLAG_SUBT | FLAG_HF_CARRY;
-    return 0;
+    return 4;
 }
 
 // SCF
@@ -2770,7 +2770,7 @@ u8 instr_cpl(CPU *cpu) {
 u8 instr_scf(CPU *cpu) {
     cpu->regs.f &= FLAG_ZERO;  // Preserve Z
     cpu->regs.f |= FLAG_CARRY; // Set C
-    return 0;
+    return 4;
 }
 
 // CCF
@@ -2785,7 +2785,7 @@ u8 instr_ccf(CPU *cpu) {
     if (!carry)
         cpu->regs.f |= FLAG_CARRY; // Set C
 
-    return 0;
+    return 4;
 }
 
 // DAA
@@ -2817,5 +2817,5 @@ u8 instr_daa(CPU *cpu) {
         cpu->regs.f |= FLAG_CARRY;
 
     cpu->regs.a = result;
-    return 0;
+    return 4;
 }
