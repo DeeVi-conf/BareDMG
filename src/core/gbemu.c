@@ -8,6 +8,34 @@
 void gb_init(GameBoy *gb) {
     memset(gb, 0, sizeof(GameBoy));
     cpu_init(&gb->cpu, gb);
+
+    // Initialize I/O registers to power-up state
+    gb->io.joyp     = 0xCF;
+
+    gb->io.sb       = 0x00;
+    gb->io.sc       = 0x7E;
+
+    gb->io.div      = 0xAB;
+    gb->io.tima     = 0x00;
+    gb->io.tma      = 0x00;
+    gb->io.tac      = 0xF8;
+
+    gb->io.if_reg   = 0xE1;
+    gb->ie_register = 0x00;
+
+    gb->io.lcdc     = 0x91;
+    gb->io.stat     = 0x85;
+    gb->io.scy      = 0x00;
+    gb->io.scx      = 0x00;
+    gb->io.ly       = 0x00;
+    gb->io.lyc      = 0x00;
+    gb->io.bgp      = 0xFC;
+    gb->io.obp0     = 0x00;
+    gb->io.obp1     = 0x00;
+    gb->io.wy       = 0x00;
+    gb->io.wx       = 0x00;
+
+    gb->io.boot     = 0x00;
 }
 
 // Load a cartridge into GameBoy
