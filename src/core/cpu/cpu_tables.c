@@ -10,7 +10,7 @@
 // https://www.pastraiser.com/cpu/gameboy/gameboy_opcodes.html
 // ---------------------------------------------
 static const InstrFunc instr_table[256] = {
-    //0x0_
+    // 0x0_
     [0x00] = instr_nop,
     [0x01] = instr_ld_bc_nn,
     [0x02] = instr_ld_mem_bc_a,
@@ -180,7 +180,8 @@ static const InstrFunc instr_table[256] = {
     [0x94] = instr_sub_a_h,
     [0x95] = instr_sub_a_l,
     [0x96] = instr_sub_a_mem_hl,
-    [0x97] = instr_sub_a_a,    [0x98] = instr_sbc_a_b,
+    [0x97] = instr_sub_a_a,
+    [0x98] = instr_sbc_a_b,
     [0x99] = instr_sbc_a_c,
     [0x9A] = instr_sbc_a_d,
     [0x9B] = instr_sbc_a_e,
